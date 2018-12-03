@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.text.Text?>
+<<<<<<< HEAD
 <?import javafx.geometry.Insets?>
 <BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
@@ -24,6 +25,17 @@
           <Insets top="200"/>
         </VBox.margin>
       </HBox>
+=======
+<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+  <top>
+    <HBox alignment="CENTER">
+      <Label text="欢迎使用Demo ^-^ " textFill="#3e8080" style="-fx-font-size: 30"/>
+    </HBox>
+  </top>
+  <left>
+    <VBox alignment="TOP_CENTER" style="-fx-padding: 20 10 20 10">
+      <Text text="Interfaces" style="-fx-text-fill: #012345;-fx-font-weight: BOLD"/>
+>>>>>>> 157c33783af4b271e3c479f418991f7710aba6c0
     </VBox>
   </left>
   <center>
