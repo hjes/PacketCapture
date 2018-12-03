@@ -5,15 +5,30 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
 <BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
-    <HBox>
-      <Label text="欢迎使用Demo ^-^ " textFill="#3e8080"/>
+    <HBox prefHeight="20" alignment="CENTER_LEFT" spacing="10">
+      <Label text="welcome ^-^ " textFill="#3e8080" style="-fx-start-margin:200 200 200 200"/>
+      <JFXButton fx:id="home_btn_flash" buttonType="RAISED" text="刷新" prefWidth="100" style="-fx-border-color: #263238;-fx-text-fill: BLACK"/>
+      <HBox style="-fx-background-color:BLACK;-fx-margin:200px 200px 200px 200px"  prefWidth="100">
+      </HBox>
     </HBox>
   </top>
+  <left>
+    <VBox style="-fx-border-color: #214503;-fx-padding: 10,0,0,0;-fx-start-margin: 10" prefWidth="150" spacing="10" alignment="TOP_CENTER">
+      <Text text="接口" style="-fx-font-family: 'Al Bayan';-fx-font-size: 10" />
+      <HBox prefWidth="100" style="-fx-background-color: BLACK" prefHeight="100">
+        <VBox.margin>
+          <Insets top="200"/>
+        </VBox.margin>
+      </HBox>
+    </VBox>
+  </left>
   <center>
     <VBox spacing="20">
-      <HBox spacing="10">
+      <HBox spacing="10" alignment="CENTER">
         <JFXButton fx:id="homeBtn1" text="btn1" buttonType="FLAT" prefWidth="100" styleClass="jfx-button-primary"/>
       </HBox>
     </VBox>
