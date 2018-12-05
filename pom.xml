@@ -5,9 +5,12 @@
   <groupId>demo</groupId>
   <artifactId>client</artifactId>
   <version>1.0.0</version>
+  <!--<modules>-->
+    <!--<module>jnetpcapmodule</module>-->
+    <!--<module>servicecenter</module>-->
+  <!--</modules>-->
   <packaging>jar</packaging>
 
-  <name>client</name>
   <url>http://maven.apache.org</url>
 
   <properties>

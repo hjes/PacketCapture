@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.text.Text?>
-<?import javafx.geometry.Insets?>
+
 <BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
     <HBox alignment="CENTER">
-      <Label text="欢迎使用Packet Capture^-^ " textFill="#3e8080" style="-fx-font-size: 30"/>
+      <Label style="-fx-font-size: 30" text="欢迎使用Packet Capture^-^ " textFill="#3e8080" />
     </HBox>
   </top>
   <left>
     <VBox alignment="TOP_CENTER" style="-fx-padding: 20 10 20 10;-fx-border-color: BLACK">
-      <Text text="Interfaces" style="-fx-text-fill: #012345;-fx-font-weight: BOLD;-fx-border-color: BLACK"/>
+      <Text style="-fx-text-fill: #012345;-fx-font-weight: BOLD;-fx-border-color: BLACK" text="Interfaces" />
     </VBox>
   </left>
   <center>

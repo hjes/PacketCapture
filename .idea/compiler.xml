@@ -6,11 +6,15 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="client" />
+        <module name="jnetpcapmodule" />
+        <module name="packetcapture" />
+        <module name="servicecenter" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="client" target="8" />
+      <module name="jnetpcapmodule" target="8" />
+      <module name="packetcapture" target="8" />
+      <module name="servicecenter" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
