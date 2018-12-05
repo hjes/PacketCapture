@@ -37,7 +37,7 @@ public class App extends Application {
             false, true, true);
 
         // init scene with a decorator
-        Scene scene = new Scene(decorator, 750, 500);
+        Scene scene = new Scene(decorator, 1000, 800);
         final ObservableList<String> stylesheets = scene.getStylesheets();
         stylesheets.add(App.class.getResource("/css/main.css").toExternalForm());
         primaryStage.setMinWidth(500);

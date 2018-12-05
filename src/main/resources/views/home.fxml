@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.effect.SepiaTone?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane fx:id="root" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="750" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
-    <HBox alignment="CENTER">
-      <Label style="-fx-font-size: 30" text="欢迎使用Packet Capture^-^ " textFill="#3e8080" />
-    </HBox>
+    <Label prefHeight="5"/>
   </top>
   <left>
-    <VBox alignment="TOP_CENTER" style="-fx-padding: 20 10 20 10;-fx-border-color: BLACK">
-      <Text style="-fx-text-fill: #012345;-fx-font-weight: BOLD;-fx-border-color: BLACK" text="Interfaces" />
+    <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
+      <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="接口">
+      </Text>
+      <ListView fx:id="home_list_interface" style="-fx-padding: 5 2 2 0;-fx-border-color:rgba(0,0,0,0.25)">
+        <VBox.margin><Insets bottom="2" right="2" /></VBox.margin>
+      </ListView>
     </VBox>
   </left>
   <center>
-    <VBox spacing="20">
-      <HBox spacing="10">
-      </HBox>
-    </VBox>
+    <HBox>
+      <StackPane style="-fx-padding: 0 5 0 5">
+        <Button text="start>>" textAlignment="CENTER"/>
+      </StackPane>
+      <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
+        <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
+        </Text>
+        <JFXListView>
+
+        </JFXListView>
+      </VBox>
+    </HBox>
   </center>
+  <bottom>
+    <HBox alignment="CENTER_LEFT" prefHeight="50">
+      <Text text="细节">
+        <HBox.margin><Insets left="5" /> </HBox.margin>
+      </Text>
+      <StackPane HBox.hgrow="SOMETIMES">
+        <HBox alignment="CENTER" prefWidth="100.0">
+          <Label fx:id="" text="..." />
+        </HBox>
+      </StackPane>
+    </HBox>
+  </bottom>
 </BorderPane>
