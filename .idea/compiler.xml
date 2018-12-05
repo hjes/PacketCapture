@@ -11,7 +11,7 @@
         <module name="servicecenter" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8">
       <module name="jnetpcapmodule" target="8" />
       <module name="packetcapture" target="8" />
       <module name="servicecenter" target="8" />

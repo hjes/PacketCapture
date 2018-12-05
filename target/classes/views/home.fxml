@@ -2,54 +2,51 @@
 
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.effect.Bloom?>
-<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.TextField?>
 <BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="750" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
-    <Label prefHeight="5"/>
+    <Label prefHeight="5" />
   </top>
   <left>
     <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
       <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="接口">
       </Text>
-      <ListView fx:id="home_list_interface" style="-fx-padding: 5 2 2 0;-fx-border-color:rgba(0,0,0,0.25)">
-        <VBox.margin><Insets bottom="2" right="2" /></VBox.margin>
+      <ListView fx:id="home_list_interface" style="-fx-border-color:BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)" VBox.vgrow="ALWAYS">
+        <VBox.margin><Insets bottom="2" /></VBox.margin>
       </ListView>
     </VBox>
   </left>
   <center>
     <HBox>
-      <StackPane style="-fx-padding: 0 5 0 5">
-        <Button text="start>>" textAlignment="CENTER"/>
+      <StackPane style="-fx-padding: 0 5 0 5;-fx-border-color: GRAY rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)">
+        <Button text="start>>" textAlignment="CENTER" />
       </StackPane>
       <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
         </Text>
-        <JFXListView>
+        <JFXListView fx:id="home_list_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)"
+                     VBox.vgrow="ALWAYS">
+          <VBox.margin><Insets bottom="2" /></VBox.margin>
 
         </JFXListView>
       </VBox>
     </HBox>
   </center>
   <bottom>
-    <HBox alignment="CENTER_LEFT" prefHeight="50">
-      <Text text="细节">
-        <HBox.margin><Insets left="5" /> </HBox.margin>
-      </Text>
-      <StackPane HBox.hgrow="SOMETIMES">
-        <HBox alignment="CENTER" prefWidth="100.0">
-          <Label fx:id="" text="..." />
-        </HBox>
-      </StackPane>
-    </HBox>
+    <ScrollPane prefWidth="850">
+          <TextArea VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="850"/>
+    </ScrollPane>
   </bottom>
 </BorderPane>
