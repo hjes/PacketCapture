@@ -48,6 +48,7 @@ public class App extends Application {
         primaryStage.show();
     }
 
+
     private static void logError(Thread t, Throwable e) {
         if (Platform.isFxApplicationThread()) {
             logger.error("Catch unexpected fx exception", e);

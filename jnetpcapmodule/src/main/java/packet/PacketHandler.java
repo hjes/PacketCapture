@@ -22,7 +22,6 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
         this.deviceName = deviceName;
         //sender init
         packageSender = new PackageSender(deviceName);
-        packageSender.start();
     }
 
     @Override
@@ -44,7 +43,7 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
          );
 
         //找到合适的packet就添加到队列中发送出去
-        packageSender.addPacket(packet);
+        packageSender.process(packet);
 
         String contend = packet.toString();
         if (contend.contains("DDDDD")&&contend.contains("upass")) {

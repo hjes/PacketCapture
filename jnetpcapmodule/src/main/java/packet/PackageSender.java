@@ -1,20 +1,24 @@
 package packet;
+
+import common.Common;
+import common.Observer;
 import org.jnetpcap.packet.PcapPacket;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class PackageSender extends Thread{
+ public class PackageSender extends Thread implements PacketProcessor{
 
-    private ArrayBlockingQueue<PcapPacket> packetQueue;
+    private LinkedBlockingQueue<PcapPacket> packetQueue;
     private List<Observer<String>> observerList;
     private String deviceName;
     private PacketProcessor packetProcessor;
+    private boolean hasStarted = false;
 
     private PackageSender(){
-        packetQueue = new ArrayBlockingQueue<>(1000);
+        packetQueue = new LinkedBlockingQueue<>(1000);
         observerList = new LinkedList<>();
     }
 
@@ -29,7 +33,7 @@ public class PackageSender extends Thread{
      * @param packet 接收到的数据包
      * @return
      */
-    public boolean addPacket(PcapPacket packet){
+    private boolean addPacket(PcapPacket packet){
         return packetQueue.offer(packet);
     }
 
@@ -47,5 +51,21 @@ public class PackageSender extends Thread{
                 }
             }
         }
+    }
+
+    private void startService(){
+        Common.executor.execute(this);
+    }
+
+    @Override
+    public void process(PcapPacket packet) {
+        if (!hasStarted)
+            startService();
+        addPacket(packet);
+    }
+
+    public PackageSender sendDatas(PcapPacket pcapPacket){
+        process(pcapPacket);
+        return this;
     }
 }

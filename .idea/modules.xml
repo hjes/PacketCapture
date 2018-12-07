@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/jnetpcapmodule/jnetpcapmodule.iml" filepath="$PROJECT_DIR$/jnetpcapmodule/jnetpcapmodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/packetcapture.iml" filepath="$PROJECT_DIR$/packetcapture.iml" />
-      <module fileurl="file://$PROJECT_DIR$/servicecenter/servicecenter.iml" filepath="$PROJECT_DIR$/servicecenter/servicecenter.iml" />
     </modules>
   </component>
 </project>

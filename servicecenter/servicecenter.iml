@@ -13,5 +13,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.13-beta-1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="module" module-name="jnetpcapmodule" />
+    <orderEntry type="library" name="jnetpcap " level="application" />
   </component>
 </module>

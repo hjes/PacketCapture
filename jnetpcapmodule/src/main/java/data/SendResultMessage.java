@@ -50,12 +50,12 @@ public class SendResultMessage {
         this.messageTime = messageTime;
     }
 
-    public static SendResultMessage IS_OK(int resultCode,String interfaceName,Date messageTime){
-        return new SendResultMessage(resultCode,interfaceName,messageTime);
+    public static SendResultMessage IS_OK(String interfaceName,Date messageTime){
+        return new SendResultMessage(SEND_RESULT_OK,interfaceName,messageTime);
     }
 
-    public static SendResultMessage IS_ERROR(int resultCode,String interfaceName,Date messageTime,String errorMessage){
-        SendResultMessage sendResultMessage = new SendResultMessage(resultCode,interfaceName,messageTime);
+    public static SendResultMessage IS_ERROR(String interfaceName,Date messageTime,String errorMessage){
+        SendResultMessage sendResultMessage = new SendResultMessage(SEND_RESULT_ERROR,interfaceName,messageTime);
         sendResultMessage.setErrorMessage(errorMessage);
         return sendResultMessage;
     }

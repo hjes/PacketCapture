@@ -23,15 +23,15 @@
     <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
       <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="接口">
       </Text>
-      <ListView fx:id="home_list_interface" style="-fx-border-color:BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)" VBox.vgrow="ALWAYS">
+      <JFXListView fx:id="home_list_interface" style="-fx-border-color:BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)" VBox.vgrow="ALWAYS">
         <VBox.margin><Insets bottom="2" /></VBox.margin>
-      </ListView>
+      </JFXListView>
     </VBox>
   </left>
   <center>
     <HBox>
       <StackPane style="-fx-padding: 0 5 0 5;-fx-border-color: GRAY rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)">
-        <Button text="start>>" textAlignment="CENTER" />
+        <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" />
       </StackPane>
       <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">

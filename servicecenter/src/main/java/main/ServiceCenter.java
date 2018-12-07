@@ -1,12 +1,16 @@
 package main;
 
 
+import common.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class ServiceCenter {
-    private HashMap<String,Service> serviceMap = new HashMap<String, Service>(5);
+
+    private ServiceCenter(){}
+
+    private HashMap<String, Service> serviceMap = new HashMap<String, Service>(5);
     /**
      * 注册服务
      * @param service 服务实例
@@ -31,6 +35,7 @@ public class ServiceCenter {
             return true;
         }
         return false;
+
     }
 
     /**
@@ -59,5 +64,13 @@ public class ServiceCenter {
 
     public Service findService(Class<?> clazz){
         return serviceMap.get(clazz.getName());
+    }
+
+    private static class ServiceCenterHolder{
+        private static ServiceCenter INSTANCE = new ServiceCenter();
+    }
+
+    public static ServiceCenter getInstance(){
+        return ServiceCenterHolder.INSTANCE;
     }
 }
