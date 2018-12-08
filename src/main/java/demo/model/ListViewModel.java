@@ -34,4 +34,5 @@ public class ListViewModel<T> {
     public List<T> getList(){
         return linkedList;
     }
+
 }

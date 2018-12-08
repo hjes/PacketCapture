@@ -79,7 +79,7 @@
       <groupId>packetcapture</groupId>
       <artifactId>jnetpcapmodule</artifactId>
       <version>1.0.0</version>
-      <scope>test</scope>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 

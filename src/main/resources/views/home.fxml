@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-
-<?import javafx.scene.control.TextField?>
+<?import com.jfoenix.controls.JFXTreeTableView?>
+<?import com.jfoenix.controls.JFXTreeTableColumn?>
 <BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="750" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
-    <Label prefHeight="5" />
+    <Label prefHeight="3" />
   </top>
   <left>
     <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
@@ -31,16 +31,26 @@
   <center>
     <HBox>
       <StackPane style="-fx-padding: 0 5 0 5;-fx-border-color: GRAY rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)">
-        <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" />
+        <VBox alignment="CENTER" spacing="20">
+          <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" prefWidth="100"/>
+          <Button fx:id="home_btn_lose_rate" text="0" textAlignment="CENTER" prefWidth="100"/>
+        </VBox>
       </StackPane>
       <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
         </Text>
-        <JFXListView fx:id="home_list_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)"
-                     VBox.vgrow="ALWAYS">
+        <JFXTreeTableView fx:id="home_table_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)"
+                          VBox.vgrow="ALWAYS">
           <VBox.margin><Insets bottom="2" /></VBox.margin>
-
-        </JFXListView>
+          <columns>
+            <JFXTreeTableColumn fx:id="packetIDColumn"
+                                text="id" minWidth="50" resizable="false"/>
+            <JFXTreeTableColumn fx:id="packetLengthColumn"
+                                text="Last Name" minWidth="133" resizable="false"/>
+            <JFXTreeTableColumn fx:id="packetProtocolColumn"
+                                text="protocol" minWidth="200" resizable="false"/>
+          </columns>
+        </JFXTreeTableView>
       </VBox>
     </HBox>
   </center>
