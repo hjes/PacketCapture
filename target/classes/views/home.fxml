@@ -13,17 +13,16 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXTreeTableView?>
-<?import com.jfoenix.controls.JFXTreeTableColumn?>
-<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="750" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
-  <top>
-    <Label prefHeight="3" />
-  </top>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.CheckBox?>
+<BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <left>
     <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
       <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="接口">
       </Text>
-      <JFXListView fx:id="home_list_interface" style="-fx-border-color:BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)" VBox.vgrow="ALWAYS">
+      <JFXListView fx:id="home_list_interface" style="-fx-border-color:BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)" VBox.vgrow="ALWAYS"
+      minWidth="200">
         <VBox.margin><Insets bottom="2" /></VBox.margin>
       </JFXListView>
     </VBox>
@@ -32,31 +31,57 @@
     <HBox>
       <StackPane style="-fx-padding: 0 5 0 5;-fx-border-color: GRAY rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)">
         <VBox alignment="CENTER" spacing="20">
-          <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" prefWidth="100"/>
-          <Button fx:id="home_btn_lose_rate" text="0" textAlignment="CENTER" prefWidth="100"/>
+          <VBox spacing="5" alignment="CENTER">
+            <Text text="开始抓包"  style="-fx-text-fill: #2b1656"/>
+            <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" prefWidth="100"/>
+          </VBox>
+          <VBox spacing="5" alignment="CENTER">
+            <Text text="丢包率"  style="-fx-text-fill: #2b1656"/>
+            <Button fx:id="home_btn_lose_rate" text="0" textAlignment="CENTER" prefWidth="100"/>
+          </VBox>
+          <Button fx:id="home_btn_flash" text="刷新" alignment="CENTER" prefWidth="100"/>
+          <HBox alignment="CENTER_RIGHT" style="-fx-border-color: BLACK;-fx-padding: 5">
+            <CheckBox fx:id="home_ckbox_auto_flash" alignment="CENTER_RIGHT" selected="true">
+              <HBox.margin ><Insets right="5"/> </HBox.margin>
+            </CheckBox>
+            <Label text="auto_flash"/>
+          </HBox>
         </VBox>
       </StackPane>
       <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
         </Text>
-        <JFXTreeTableView fx:id="home_table_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0)"
+        <TableView fx:id="home_table_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0);-fx-text-alignment: CENTER"
                           VBox.vgrow="ALWAYS">
           <VBox.margin><Insets bottom="2" /></VBox.margin>
           <columns>
-            <JFXTreeTableColumn fx:id="packetIDColumn"
-                                text="id" minWidth="50" resizable="false"/>
-            <JFXTreeTableColumn fx:id="packetLengthColumn"
-                                text="Last Name" minWidth="133" resizable="false"/>
-            <JFXTreeTableColumn fx:id="packetProtocolColumn"
-                                text="protocol" minWidth="200" resizable="false"/>
+            <TableColumn fx:id="packetIDColumn" style="-fx-alignment: CENTER"
+                                text="id"  prefWidth="50" resizable="false"/>
+            <TableColumn fx:id="packetTimeColumn" style="-fx-alignment: CENTER"
+                                text="time" prefWidth="150" resizable="false"/>
+            <TableColumn fx:id="packetLengthColumn" style="-fx-alignment: CENTER"
+                                text="length" prefWidth="50" resizable="false"/>
+            <TableColumn fx:id="packetProtocolColumn" style="-fx-alignment: CENTER"
+                                text="protocol" prefWidth="150" resizable="false"/>
+            <TableColumn fx:id="packetInfoColumn" style="-fx-alignment: CENTER"
+                         text="protocol" prefWidth="200" resizable="false"/>
           </columns>
-        </JFXTreeTableView>
+        </TableView>
       </VBox>
     </HBox>
   </center>
   <bottom>
-    <ScrollPane prefWidth="850">
-          <TextArea VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="850"/>
+    <HBox alignment="CENTER_LEFT">
+    <ScrollPane prefWidth="500">
+          <TextArea fx:id="home_textarea_logging" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="850"
+          promptText="logging"/>
     </ScrollPane>
+      <HBox>
+        <VBox style="-fx-padding: 5;-fx-border-color: BLACK" spacing="5">
+          <HBox.margin><Insets left="5" top="5" bottom="5"/></HBox.margin>
+          <Button fx:id="home_btn_clear_textarea" text="clear"/>
+        </VBox>
+      </HBox>
+    </HBox>
   </bottom>
 </BorderPane>

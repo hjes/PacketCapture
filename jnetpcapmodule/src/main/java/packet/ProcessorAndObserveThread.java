@@ -1,8 +1,10 @@
 package packet;
 
 import common.ObserverCenter;
+import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,12 +32,12 @@ public class ProcessorAndObserveThread extends Thread implements PacketProcessor
 
     /**
      * 添加packet到队列
-     * @param packet 需要处理的包
+     * @param packetWrapper 需要处理的包
      * add，当queue满时抛出异常，offer返回false
      */
     @Override
-    public void process(PcapPacket packet) {
-        if(pcapPacketConcurrentLinkedQueue.offer(packet))
+    public void process(PacketWrapper packetWrapper) {
+        if(pcapPacketConcurrentLinkedQueue.offer(packetWrapper.getPcapPacket()))
             currentSize++;
         else{
             lossSize++;
@@ -59,7 +61,7 @@ public class ProcessorAndObserveThread extends Thread implements PacketProcessor
             //将抓取到的包传递给process进行处理
             if (tempPcapPacket!=null)
                 for (PacketProcessor packetProcessor:packetProcessorList){
-                    packetProcessor.process(tempPcapPacket);
+                    packetProcessor.process(new PacketWrapper(tempPcapPacket).addObject(PacketWrapper.TIME,new Date()));
                 }
         }
     }

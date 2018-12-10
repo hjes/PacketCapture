@@ -1,7 +1,9 @@
 package demo;
 
+import common.ObserverCenter;
 import demo.control.CustomJFXDecorator;
 import demo.controller.MainController;
+import demo.util.AlertUtils;
 import io.datafx.controller.flow.Flow;
 import io.datafx.controller.flow.container.DefaultFlowContainer;
 import io.datafx.controller.flow.context.ViewFlowContext;
@@ -15,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Created by Snart Lu on 2018/2/5. <br/>
+ *
  */
 public class App extends Application {
     private static Logger logger = LoggerFactory.getLogger(App.class.getName());
@@ -37,7 +39,7 @@ public class App extends Application {
             false, true, true);
 
         // init scene with a decorator
-        Scene scene = new Scene(decorator, 850, 750);
+        Scene scene = new Scene(decorator, 1000, 750);
         final ObservableList<String> stylesheets = scene.getStylesheets();
         stylesheets.add(App.class.getResource("/css/main.css").toExternalForm());
         primaryStage.setMinWidth(500);
@@ -48,12 +50,18 @@ public class App extends Application {
         primaryStage.show();
     }
 
-
+    /**
+     * 全局ExceptionHandler
+     * @param t 线程
+     * @param e 异常
+     */
     private static void logError(Thread t, Throwable e) {
         if (Platform.isFxApplicationThread()) {
             logger.error("Catch unexpected fx exception", e);
         } else {
             logger.error("An unexpected error occurred in {}", t, e);
         }
+        AlertUtils.showException(new Exception(e));
+        ObserverCenter.notifyLogging(e.toString());
     }
 }

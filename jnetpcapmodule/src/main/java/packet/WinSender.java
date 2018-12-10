@@ -1,5 +1,6 @@
 package packet;
 
+import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.packet.PcapPacket;
@@ -27,7 +28,7 @@ public class WinSender implements PacketProcessor{
     }
 
     @Override
-    public void process(PcapPacket packet) {
+    public void process(PacketWrapper packetWrapper) {
 //        if (bytes==null||byteLength<packet.getCaptureHeader().caplen()){
 //            if(bytes!=null)
 //                byteLength = packet.getCaptureHeader().caplen();
@@ -35,10 +36,10 @@ public class WinSender implements PacketProcessor{
 //            System.out.println("init byte 1024");
 //        }
         //Transfer data to destination
-        JBuffer jBuffer = new JBuffer(packet.getTotalSize());
-        packet.transferTo(jBuffer);
+        JBuffer jBuffer = new JBuffer(packetWrapper.getPcapPacket().getTotalSize());
+        packetWrapper.getPcapPacket().transferTo(jBuffer);
 //        packet.transferStateAndDataTo(bytes);
-        System.out.println("send to " + deviceName + " " + packet.getCaptureHeader().caplen() + "bytes -- len : " + packet.getPacketWirelen());
+        System.out.println("send to " + deviceName + " " + packetWrapper.getPcapPacket().getCaptureHeader().caplen() + "bytes -- len : " + packetWrapper.getPcapPacket().getPacketWirelen());
         if (pcap.sendPacket(jBuffer) != Pcap.OK) {
             //send error
             System.err.println(pcap.getErr());

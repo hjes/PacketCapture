@@ -1,5 +1,6 @@
 package packet;
 
+import data.PacketWrapper;
 import org.jnetpcap.PcapDumper;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.packet.PcapPacket;
@@ -48,7 +49,7 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
 
         //找到合适的packet就添加到队列中发送出去
 //        packageSender.process(packet);
-        processorAndObserveThread.process(packet);
+        processorAndObserveThread.process(new PacketWrapper(packet));
 //        String contend = packet.toString();
 //        if (contend.contains("DDDDD")&&contend.contains("upass")) {
 //            System.out.println(contend);

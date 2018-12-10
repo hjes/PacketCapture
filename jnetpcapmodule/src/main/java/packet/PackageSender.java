@@ -2,6 +2,8 @@ package packet;
 
 import common.Common;
 import common.Observer;
+import common.ObserverCenter;
+import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
 
 import java.util.LinkedList;
@@ -43,11 +45,12 @@ import java.util.concurrent.LinkedBlockingQueue;
         for(;;){
             try {
                 PcapPacket packet = packetQueue.take();
-                packetProcessor.process(packet);
+                packetProcessor.process(new PacketWrapper(packet));
             } catch (InterruptedException e) {
 //                e.printStackTrace();
                 for (Observer<String> observer:observerList){
                     observer.update(e.toString());
+                    ObserverCenter.notifyLogging("发送数据异常：" + e.toString());
                 }
             }
         }
@@ -58,14 +61,18 @@ import java.util.concurrent.LinkedBlockingQueue;
     }
 
     @Override
-    public void process(PcapPacket packet) {
-        if (!hasStarted)
+    public void process(PacketWrapper packetWrapper) {
+        if (!hasStarted) {
+            ObserverCenter.notifyLogging("服务未开始，正在开始服务...");
             startService();
-        addPacket(packet);
+            ObserverCenter.notifyLogging("服务开启成功");
+            hasStarted = true;
+        }
+        addPacket(packetWrapper.getPcapPacket());
     }
 
     public PackageSender sendDatas(PcapPacket pcapPacket){
-        process(pcapPacket);
+        process(new PacketWrapper(pcapPacket));
         return this;
     }
 }
