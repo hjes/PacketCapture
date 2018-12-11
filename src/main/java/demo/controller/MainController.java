@@ -61,7 +61,7 @@ public class MainController {
             }
         });
         JavaFxObservable.actionEventsOf(demo).subscribe(actionEvent -> {
-            if (!(flowHandler.getCurrentView().getViewContext().getController() instanceof DemoController)) {
+            if (!(flowHandler.getCurrentView().getViewContext().getController() instanceof HttpController)) {
                 flowHandler.handle(demo.getId());
                 saveDisable.setValue(Boolean.FALSE);
             }
@@ -72,7 +72,7 @@ public class MainController {
 
         // bind menu to view in flow
         bindMenuToController(home, HomeController.class, innerFlow);
-        bindMenuToController(demo, DemoController.class, innerFlow);
+        bindMenuToController(demo, HttpController.class, innerFlow);
 
         saveDisable.setValue(Boolean.TRUE);
         save.disableProperty().bindBidirectional(saveDisable);

@@ -1,6 +1,7 @@
 package packet;
+import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
 
 public interface PacketProcessor{
-    void process(PcapPacket packet);
+    void process(PacketWrapper packetWrapper);
 }

@@ -1,7 +1,9 @@
 package packet;
 
+import common.ObserverCenter;
 import common.PacketService;
 import data.Data;
+import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
 
@@ -24,7 +26,8 @@ public class PacketCaptureServiceProxy{
      * @return 数据是否添加到队列
      */
     public static void sendSomeData(String interfaceName,Data data) {
-        senderPool.get(interfaceName).process(data.getPacket());
+        getPacketSender(interfaceName).process(new PacketWrapper(data.getPacket()));
+        ObserverCenter.notifyLogging("数据加入队列");
     }
 
     public static List<String> getAllInterfacesName() {
@@ -82,5 +85,4 @@ public class PacketCaptureServiceProxy{
     public static void startCapturingPacket(String interfaceName){
         PackageCapture.mainCapture(interfaceName);
     }
-
 }
