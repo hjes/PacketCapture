@@ -2,7 +2,6 @@ package demo.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTreeTableColumn;
-import common.Observer;
 import common.ObserverCenter;
 import data.PacketWrapper;
 import demo.model.ListViewModel;
@@ -29,11 +28,9 @@ import javafx.util.Callback;
 import org.jnetpcap.packet.PcapPacket;
 import packet.PackageCapture;
 import packet.PacketCaptureServiceProxy;
-import packet.PacketProcessor;
 import packet.ProcessorAndObserveThread;
 
 
-import javax.swing.text.html.ImageView;
 import java.util.*;
 import java.util.function.Function;
 
