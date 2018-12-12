@@ -1,15 +1,17 @@
 package packet;
 
+import common.ThreadObserver;
 import data.PacketWrapper;
 import filter.MultiPacketFilter;
-import filter.PacketFilter;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
 
 public class PacketHandler<T> implements PcapPacketHandler<T> {
 
-    private ProcessorAndObserveThread processorAndObserveThread = new ProcessorAndObserveThread();
+    private ProcessorThread processorAndObserveThread = new ProcessorThread();
     private MultiPacketFilter multiPacketFilter;//包过滤器
+    private ThreadObserver threadObserver = new ThreadObserver();
+    private boolean needWait = false;
 
     public void start(){
         processorAndObserveThread.start();
@@ -38,6 +40,15 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
         return this;
     }
 
+    public void setPause(){
+        needWait = true;
+    }
+
+    public void setConsume(){
+        needWait = false;
+        threadObserver.notifyNow();
+    }
+
     @Override
     public void nextPacket(PcapPacket packet, T user) {
         /*Http http = new Http();
@@ -57,8 +68,18 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
          */
         //找到合适的packet就添加到队列中发送出去
         // packageSender.process(packet);
-        if (multiPacketFilter.packetFilter(packet))//如果满足过滤要求则对该包进行处理
+        if (needWait)
+            threadObserver.waitNow();
+
+        if (multiPacketFilter!=null)//如果满足过滤要求则对该包进行处理
+        {
+            if (multiPacketFilter.packetFilter(packet))
+                processorAndObserveThread.process(new PacketWrapper(packet));
+        }
+        else{//不设置过滤器
             processorAndObserveThread.process(new PacketWrapper(packet));
+        }
+
         /*
         String contend = packet.toString();
         if (contend.contains("DDDDD")&&contend.contains("upass")) {

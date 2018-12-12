@@ -3,10 +3,10 @@ package packet;
 import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.nio.JBuffer;
-import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.winpcap.WinPcap;
+import packet.interfaces.PacketProcessor;
 
-public class WinSender implements PacketProcessor{
+public class WinSender implements PacketProcessor {
     private int snaplen; // Capture all packets, no trucation
     private int flags; // capture all packets
     private int timeout; // 10 seconds in millis

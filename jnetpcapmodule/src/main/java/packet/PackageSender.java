@@ -5,13 +5,14 @@ import common.Observer;
 import common.ObserverCenter;
 import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
+import packet.interfaces.PacketProcessor;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
- public class PackageSender extends Thread implements PacketProcessor{
+ public class PackageSender extends Thread implements PacketProcessor {
 
     private LinkedBlockingQueue<PcapPacket> packetQueue;
     private List<Observer<String>> observerList;

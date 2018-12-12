@@ -26,9 +26,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import org.jnetpcap.packet.PcapPacket;
-import packet.PackageCapture;
+import packet.PacketCapture;
 import packet.PacketCaptureServiceProxy;
-import packet.ProcessorAndObserveThread;
+import packet.ProcessorThread;
 
 
 import java.util.*;
@@ -174,7 +174,7 @@ public class HomeController extends AbstractController<HomeRepository> {
         setupPacketTableView();
 
         //抓包到主界面更新，抓包成功后回调该接口
-        ProcessorAndObserveThread.addProcessor(packetWrapper -> Platform.runLater(new Runnable() {
+        ProcessorThread.addProcessor(packetWrapper -> Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 //TODO 链接
@@ -254,7 +254,6 @@ public class HomeController extends AbstractController<HomeRepository> {
                 GlobalMenu.getInstance().hide();
             }
         });
-
 //        setupCellValueFactory(packetIDColumn, PacketModel::idProperty);
 //        setupCellValueFactory(packetTimeColumn,PacketModel::packetTimeProperty);
 //        setupCellValueFactory(packetLengthColumn, PacketModel::packetLengthProperty);
@@ -294,7 +293,7 @@ public class HomeController extends AbstractController<HomeRepository> {
         dummyData = FXCollections.observableList(packetModelListViewModel.getList());
         home_table_packet.setEditable(true);
         home_table_packet.setItems(dummyData);
-        //        dummyData.add(new PacketModel("0","2","3","4","info1"));
+//        dummyData.add(new PacketModel("0","2","3","4","info1"));
 //        dummyData.add(new PacketModel("1","2","3","4",null));
 //        dummyData.add(new PacketModel("2","2","3","4",null));
 //        dummyData.add(new PacketModel("3","2","3","4","info2"));
@@ -341,6 +340,6 @@ public class HomeController extends AbstractController<HomeRepository> {
     }
 
     private void startCapture(String interfaceName){
-        new Thread(() -> PackageCapture.mainCapture(interfaceName)).start();
+        PacketCaptureServiceProxy.startCapturingPacket(interfaceName);
     }
 }

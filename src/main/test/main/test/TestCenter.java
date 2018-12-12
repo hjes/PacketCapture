@@ -1,13 +1,11 @@
 package main.test;
 
+import common.ThreadObserver;
 import demo.model.ListViewModel;
-import demo.model.PacketModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.Test;
-import packet.PackageCapture;
 
-import java.sql.Time;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -25,7 +23,6 @@ public class TestCenter {
 
     @Test
     public void captureTest(){
-        PackageCapture.mainCapture(new String[]{"1"});
     }
 
     @Test
@@ -80,5 +77,26 @@ public class TestCenter {
                     timer.cancel();
             }
         },1000,3000);
+    }
+
+    @Test
+    public void threadPauseTest(){
+        final ThreadObserver threadObserver = new ThreadObserver();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("sleeping");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("notify it");
+                threadObserver.notifyNow();
+            }
+        }).start();
+        System.out.println("wait");
+        threadObserver.waitNow();
+        System.out.println("notify");
     }
 }

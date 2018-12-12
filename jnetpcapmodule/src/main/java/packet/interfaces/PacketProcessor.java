@@ -1,4 +1,4 @@
-package packet;
+package packet.interfaces;
 import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
 

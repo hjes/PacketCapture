@@ -1,17 +1,16 @@
 package packet;
 
 import common.ObserverCenter;
-import common.PacketService;
 import data.Data;
 import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
-import packet.PackageCapture;
-import packet.PackageSender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static packet.PacketCaptureServiceProxy.CaptureThreadState.PAUSE;
 
 
 /**
@@ -22,6 +21,13 @@ public class PacketCaptureServiceProxy{
     private static HashMap<String, PackageSender> senderPool = new HashMap<>(5);
     private static List<String> interfaceName;
     private static List<String> interfaceDetails;
+    private static HashMap<String,PacketCaptureThread> packetCaptureThreadHashMap = new HashMap<>(5);
+
+    public static final class CaptureThreadState{
+        public static int PAUSE = 1;
+        public static int CONSUME = 2;
+        public static int QUIT = 3;
+    }
     /**
      * @param interfaceName 接口名
      * @param data 数据
@@ -84,7 +90,32 @@ public class PacketCaptureServiceProxy{
         return packageSender;
     }
 
+    /**
+     * @param interfaceName 接口名
+     */
     public static void startCapturingPacket(String interfaceName){
-        PackageCapture.mainCapture(interfaceName);
+        PacketCaptureThread packetCaptureThread = null;
+        if (packetCaptureThreadHashMap.get(interfaceName)==null) {
+            packetCaptureThread = new PacketCaptureThread(interfaceName);
+            packetCaptureThreadHashMap.put(interfaceName,packetCaptureThread);
+            packetCaptureThread.startService();
+        }else{
+            ObserverCenter.notifyLogging("has opened this interface capturing");
+        }
     }
+
+    /**
+     * 抓包线程管理
+     */
+    public static void setPacketCaptureThreadState(String interfaceName,int state){
+        PacketCaptureThread packetCaptureThread = packetCaptureThreadHashMap.get(interfaceName);
+        if (packetCaptureThread==null){
+            ObserverCenter.notifyLogging("this interface has not started,please check");
+            return;
+        }
+        switch (state){
+            case PAUSE:
+        }
+    }
+
 }
