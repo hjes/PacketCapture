@@ -1,7 +1,6 @@
 package demo.util;
 
 import common.ObserverCenter;
-import data.Data;
 import data.PacketEntity;
 import demo.model.PacketModel;
 import javafx.application.Platform;
@@ -15,7 +14,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.Pair;
-import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.packet.PcapPacket;
 import packet.PacketCaptureServiceProxy;
 

@@ -6,6 +6,8 @@ import data.Data;
 import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
+import packet.PackageCapture;
+import packet.PackageSender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public class PacketCaptureServiceProxy{
     //String：网络端口，PackageSender：想该网络端口发送数据的发送器
-    private static HashMap<String,PackageSender> senderPool = new HashMap<>(5);
+    private static HashMap<String, PackageSender> senderPool = new HashMap<>(5);
     private static List<String> interfaceName;
     private static List<String> interfaceDetails;
     /**
