@@ -6,24 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7c416ffc-6c8d-46d4-b88e-f5e97e4a409a" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/hongqianhui.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/FilterCommon.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/HttpFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/IpFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/MultiPacketFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/PacketFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/TcpFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/filter/UdpFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PackageCapture.java" beforeDir="false" afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PackageCapture.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PacketCaptureServiceProxy.java" beforeDir="false" afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PacketCaptureServiceProxy.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PacketHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/jnetpcapmodule/src/main/java/packet/PacketHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/demo/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/demo/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/demo/util/AlertUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/demo/util/AlertUtils.java" afterDir="false" />
-    </list>
+    <list default="true" id="7c416ffc-6c8d-46d4-b88e-f5e97e4a409a" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/jnetpcapmodule/target/" />
     <ignored path="$PROJECT_DIR$/servicecenter/target/" />
@@ -93,18 +76,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="351">
               <caret line="40" column="13" lean-forward="true" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/demo/util/AlertUtils.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="395">
-              <caret line="69" column="33" selection-start-line="69" selection-start-column="33" selection-end-line="69" selection-end-column="33" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -466,7 +437,7 @@
     <property name="SearchEverywhereHistoryKey" value="register&#9;FILE&#9;file:///Users/hongganhui/Downloads/javafx-demo-master/src/main/resources/css/register-dialog.css" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544583184623" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1544589457753" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -640,7 +611,7 @@
       <workItem from="1544426519967" duration="2747000" />
       <workItem from="1544431730163" duration="130000" />
       <workItem from="1544500063185" duration="592000" />
-      <workItem from="1544577009065" duration="6232000" />
+      <workItem from="1544577009065" duration="6331000" />
     </task>
     <servers />
   </component>
@@ -677,7 +648,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="85137000" />
+    <option name="totallyTimeSpent" value="85236000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -690,9 +661,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3211731" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3211731" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="UI Designer" order="3" />
@@ -709,7 +679,7 @@
       <window_info anchor="bottom" id="TODO" order="6" weight="0.3280098" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3280098" />
       <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="9" weight="0.26904178" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="9" visible="true" weight="0.26904178" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.5028612" side_tool="true" weight="0.2800983" />
       <window_info anchor="bottom" id="FindBugs-IDEA" order="11" weight="0.32909784" />
       <window_info anchor="bottom" id="Messages" order="12" weight="0.32678133" />
@@ -771,13 +741,6 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main/java/demo/util/DialogUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.log">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -1210,6 +1173,13 @@
             <element signature="method#getTheCorrectFilter#0;class#MultiPacketFilter#0" />
             <element signature="e#3281#3282#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/dictionaries/hongqianhui.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="6" column="12" lean-forward="true" selection-start-line="6" selection-start-column="12" selection-end-line="6" selection-end-column="12" />
         </state>
       </provider>
     </entry>
