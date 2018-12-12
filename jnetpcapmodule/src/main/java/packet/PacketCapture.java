@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class PackageCapture {
+public class PacketCapture {
     public static List<String> capturingInterfaces = new ArrayList<>(5);
 
     /**
@@ -31,7 +31,7 @@ public class PackageCapture {
      * 根据接口名字运行设备
      * @param interfaceName
      */
-    public static void mainCapture(String interfaceName) {
+    public static void mainCapture(String interfaceName,PacketHandler<String> packetHandler) {
         //if has started capturing this interface , return
         if (capturingInterfaces.contains(interfaceName)){
             System.out.println("has started this interface");
@@ -107,7 +107,6 @@ public class PackageCapture {
          **************************************************************************/
         String ofile = "tmp-capture-file.cap";
         PcapDumper dumper = pcap.dumpOpen(ofile); // output file
-        PacketHandler<String> packetHandler = new PacketHandler<>();
         packetHandler.start();
         pcap.loop(-1, packetHandler, "jNetP_cap rocks!");
 

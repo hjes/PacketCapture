@@ -3,31 +3,38 @@ package packet;
 import common.ObserverCenter;
 import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
+import packet.interfaces.PacketProcessor;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static common.Common.PACKET_LOSE_EVENT;
 
-public class ProcessorAndObserveThread extends Thread implements PacketProcessor {
+/**
+ * 处理包的线程
+ */
+public class ProcessorThread extends Thread implements PacketProcessor {
+    //TODO 这里的设计需要修改，把所有的服务都交给proxy，而不是让用户单独去调用
     private static List<PacketProcessor> packetProcessorList = new LinkedList<>();
     private double currentSize;
     private double lossSize;
     private int totalSize = 1500;
     private LinkedBlockingQueue<PcapPacket> pcapPacketConcurrentLinkedQueue = new LinkedBlockingQueue<>(totalSize);
 
+    public void pauseTheThread(){
+
+    }
     /**
      * 初始化时添加
      * @param packetProcessors
      */
-    public ProcessorAndObserveThread(List<PacketProcessor> packetProcessors){
+    public ProcessorThread(List<PacketProcessor> packetProcessors){
         packetProcessorList.addAll(packetProcessors);
     }
 
-    public ProcessorAndObserveThread(){
+    public ProcessorThread(){
     }
 
     /**

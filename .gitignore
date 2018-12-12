@@ -1,8 +1,8 @@
-#My Configuration
-workspace.xml
+#MyConfiguration
+*.cap
+.idea/*
 
-
-#Java Ignore File
+#Java
 # Compiled class file
 *.class
 

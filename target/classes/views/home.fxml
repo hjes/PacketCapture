@@ -16,7 +16,22 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.layout.TilePane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+  <top>
+    <TilePane style="-fx-padding: 5 0 5 0">
+      <StackPane fx:id="home_img_notification">
+        <TilePane.margin>
+          <Insets left="10"/>
+        </TilePane.margin>
+      <ImageView fitHeight="10" fitWidth="10">
+        <Image url="/image/notification-pane-warning.png"/>
+      </ImageView>
+      </StackPane>
+    </TilePane>
+  </top>
   <left>
     <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK BLACK BLACK rgba(128,128,128,0)">
       <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="接口">
