@@ -85,18 +85,65 @@ public class TestCenter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("sleeping");
+                System.out.println("sleeping1");
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                System.out.println("notify it");
+                System.out.println("notify it1");
                 threadObserver.notifyNow();
+                System.out.println("sleeping2");
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("notify it2");
+                threadObserver.notifyNow();
+                System.out.println("notify it end");
             }
         }).start();
-        System.out.println("wait");
+        System.out.println("wait1");
         threadObserver.waitNow();
-        System.out.println("notify");
+        System.out.println("notify1");
+        System.out.println("wait2");
+        threadObserver.waitNow();
+        System.out.println("notify 1 1 1 1 ");
+    }
+
+    @Test
+    public void staticTest(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                UITest.testString("heiheihei");
+            }
+        }).start();
+        UITest.testString("enenen");
+    }
+
+    @Test
+    public void synchronizedTest() throws InterruptedException {
+        UITest UI = new UITest();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (UI){
+                    System.out.println("ui sleep");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    System.out.println("unlock UI");
+                }
+            }
+        }).start();
+        Thread.sleep(1000);
+        synchronized (UI){
+            System.out.println(UI);
+        }
+        System.out.println("out ui");
     }
 }

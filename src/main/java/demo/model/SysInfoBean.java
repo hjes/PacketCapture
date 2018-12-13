@@ -22,25 +22,25 @@ public class SysInfoBean {
 
 
     public static class MemoryInfo{
-        private long headUsage;
-        private long headMax;
+        private long heapUsage;
+        private long heapMax;
         private long nonHeapUsage;
         private long nonHeapMax;
 
         public long getHeadUsage() {
-            return headUsage;
+            return heapUsage;
         }
 
-        public void setHeadUsage(long headUsage) {
-            this.headUsage = headUsage;
+        public void setHeadUsage(long heapUsage) {
+            this.heapUsage = heapUsage;
         }
 
         public long getHeadMax() {
-            return headMax;
+            return heapMax;
         }
 
-        public void setHeadMax(long headMax) {
-            this.headMax = headMax;
+        public void setHeadMax(long heapMax) {
+            this.heapMax = heapMax;
         }
 
         public long getNonHeapUsage() {

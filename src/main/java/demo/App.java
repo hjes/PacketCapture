@@ -21,9 +21,10 @@ import org.slf4j.LoggerFactory;
  */
 public class App extends Application {
     private static Logger logger = LoggerFactory.getLogger(App.class.getName());
-
+    public static Stage stage;
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
         Thread.setDefaultUncaughtExceptionHandler(App::logError);
 
         ViewFlowContext flowContext = new ViewFlowContext();
@@ -44,7 +45,7 @@ public class App extends Application {
         stylesheets.add(App.class.getResource("/css/main.css").toExternalForm());
         primaryStage.setMinWidth(500);
         primaryStage.setMinHeight(400);
-        primaryStage.setTitle("Demo");
+        primaryStage.setTitle("JPacketCapture");
         primaryStage.getIcons().add(new Image("/image/icon.png"));
         primaryStage.setScene(scene);
         primaryStage.show();

@@ -1,10 +1,10 @@
-package packet;
+package packet.processor;
 
 import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.winpcap.WinPcap;
-import packet.interfaces.PacketProcessor;
+import packet.processor.PacketProcessor;
 
 public class WinSender implements PacketProcessor {
     private int snaplen; // Capture all packets, no trucation
