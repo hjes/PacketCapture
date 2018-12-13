@@ -1,9 +1,11 @@
 package packet;
 
+import common.Observer;
 import common.ObserverCenter;
 import common.ThreadObserver;
 import data.PacketWrapper;
 import filter.MultiPacketFilter;
+import org.jnetpcap.Pcap;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
 import packet.processor.PacketProcessor;
@@ -14,8 +16,9 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
     private MultiPacketFilter multiPacketFilter;//包过滤器
     private ThreadObserver threadObserver = new ThreadObserver();
     private boolean needWait = false;
-    private boolean stopService = false;
+    //private boolean stopService = false;
     private String interfaceName;
+    private Pcap pcap;
 
     public void start(){
         processorAndObserveThread.start();
@@ -60,13 +63,31 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
         processorAndObserveThread.stopService();
         if (needWait){
             threadObserver.notifyNow();
-            stopService = true;
             needWait = false;
         }
+        pcap.breakloop();
+        processorAndObserveThread.interrupt();
+        ObserverCenter.notifyLogging("break capture loop success");
+        if (!processorAndObserveThread.isAlive()){
+            ObserverCenter.notifyLogging("close process thread success");
+        }else{
+            ObserverCenter.notifyLogging("close process thread fail");
+            if (!processorAndObserveThread.getIsStopService()){
+                //由于队列阻塞无法停止，手动加入一个让其最后运行一次停止即可
+                processorAndObserveThread.process(new PacketWrapper(new PcapPacket(new byte[]{
+                        1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16//invalid [16,0)range
+                })));
+            }
+        }
+
     }
 
     public void addProcessor(PacketProcessor packetProcessor){
         processorAndObserveThread.addProcessor(packetProcessor);
+    }
+
+    public void setPcap(Pcap pcap){
+        this.pcap = pcap;
     }
 
     @Override
@@ -88,9 +109,10 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
          */
         //找到合适的packet就添加到队列中发送出去
         // packageSender.process(packet);
-        try {
-            if (stopService)
-                throw new InterruptedException("stop service");
+//            if (stopService) {
+//                pcap.breakloop();
+//                ObserverCenter.notifyLogging("break the loop");
+//            }
             if (needWait)//TODO 这里的暂停只是把包阻塞在那里，consume之后之前的包还是会全部重新塞进去 加一个跳包的功能，即不往队列里面加就好了
                 threadObserver.waitNow();
 
@@ -101,9 +123,6 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
             } else {//不设置过滤器
                 processorAndObserveThread.process(new PacketWrapper(packet));
             }
-        }catch (InterruptedException e){
-            ObserverCenter.notifyLogging(interfaceName + " --stop service");
-        }
 
         /*
         String contend = packet.toString();

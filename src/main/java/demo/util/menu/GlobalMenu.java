@@ -1,4 +1,4 @@
-package demo.util;
+package demo.util.menu;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -15,7 +15,7 @@ public class GlobalMenu extends ContextMenu implements EventHandler<ActionEvent>
      */
     private static GlobalMenu INSTANCE = null;
 
-    private Callback callback;
+    private MenuCallback callback;
 
     private Object obj;
 
@@ -67,14 +67,14 @@ public class GlobalMenu extends ContextMenu implements EventHandler<ActionEvent>
      * 添加回调接口，返回点击Item的ID
      * @param callback 回调
      */
-    public void addListener(Callback callback){
+    public void addListener(MenuCallback callback){
         for (MenuItem menuItem:getInstance().getItems()){
             menuItem.setOnAction(this);
         }
         setCallback(callback);
     }
 
-    private void setCallback(Callback callback){
+    private void setCallback(MenuCallback callback){
         this.callback = callback;
     }
 
@@ -82,10 +82,6 @@ public class GlobalMenu extends ContextMenu implements EventHandler<ActionEvent>
     public void handle(ActionEvent event) {
         MenuItem menuItem = (MenuItem) event.getSource();
         callback.callback(menuItem.getId(),obj);
-    }
-
-    public interface Callback{
-        void callback(String menuId,Object t);
     }
 }
 

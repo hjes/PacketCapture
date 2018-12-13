@@ -1,8 +1,11 @@
 package demo.util;
 
 import demo.model.SysInfoBean;
+import demo.util.dialog.SenderDialog;
 import demo.util.dialog.SysDialog;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class DialogUtils {
 

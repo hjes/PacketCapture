@@ -22,6 +22,7 @@ public class ProcessorThread extends Thread implements PacketProcessor {
     private int totalSize = 1500;
     private LinkedBlockingQueue<PcapPacket> pcapPacketConcurrentLinkedQueue = new LinkedBlockingQueue<>(totalSize);
     private boolean stopService = false;
+    private boolean isStopService = false;
 
     public void pauseTheThread(){
 
@@ -53,15 +54,20 @@ public class ProcessorThread extends Thread implements PacketProcessor {
         }
     }
 
+    public boolean getIsStopService(){
+        return isStopService;
+    }
+
     /**
      * 从队列中不断抓取包迭代调用process处理packet
      */
     @Override
     public void run() {
-        try {
             for (; ; ) {
                 if (stopService){
-                    throw new InterruptedException("process thread stop!");
+                    isStopService = true;
+                    ObserverCenter.notifyLogging("break in process thread");
+                    break;
                 }
                 PcapPacket tempPcapPacket = null;
                 try {
@@ -75,9 +81,6 @@ public class ProcessorThread extends Thread implements PacketProcessor {
                         packetProcessor.process(new PacketWrapper(tempPcapPacket).addObject(PacketWrapper.TIME, new Date()));
                     }
             }
-        }catch (InterruptedException e){
-            ObserverCenter.notifyLogging(e.toString());
-        }
     }
 
     /**

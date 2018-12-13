@@ -110,6 +110,7 @@ public class PacketCapture {
          **************************************************************************/
         String ofile = "tmp-capture-file.cap";
         PcapDumper dumper = pcap.dumpOpen(ofile); // output file
+        packetHandler.setPcap(pcap);
         packetHandler.start();
         pcap.loop(-1, packetHandler, "jNetP_cap rocks!");
 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400" prefWidth="600.0"
+            fx:id="dialog_root">
+    <center>
+        <StackPane>
+            <HBox spacing="10" style="-fx-padding: 10 5 0 5">
+                <ListView fx:id="send_dialog_sender"/>
+                <VBox spacing="10" alignment="BOTTOM_RIGHT">
+                    <ListView fx:id="sender_dialog_receiver" HBox.hgrow="ALWAYS"/>
+                    <HBox VBox.vgrow="ALWAYS" alignment="BOTTOM_RIGHT" spacing="20">
+                        <Button fx:id="sender_dialog_btn_add_receiver" text="+" alignment="CENTER"/>
+                        <Button fx:id="sender_dialog_btn_del_receiver" text="-" alignment="CENTER"/>
+                        <Button fx:id="send_packet" text="SEND" alignment="CENTER"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+        </StackPane>
+    </center>
+</BorderPane>

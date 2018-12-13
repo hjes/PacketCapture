@@ -4,10 +4,13 @@ import demo.model.SysInfoBean;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
+import java.util.*;
 
 public class Common {
     //日志事件注册
     public static final String LOGGING = "logging";
+    //接口转发细节
+    public static HashMap<String, Set<String>>  receiverHashMap;
 
     //获取当前程序的占用信息
     public static SysInfoBean getSysInfo(){
@@ -27,4 +30,25 @@ public class Common {
 
     //TODO Java动态运行代码 从class文件中加载filter和process
 
+
+    //接口转发细节
+    public static List<String> getReceiverList(String sender){
+        Set<String> receiverSet = null;
+        if (receiverHashMap==null){
+            receiverHashMap = new HashMap<>(5);
+        }
+        if (receiverHashMap.get(sender)==null){
+            receiverSet = new HashSet<>(5);
+            receiverHashMap.put(sender,receiverSet);
+        }else{
+            receiverSet = receiverHashMap.get(sender);
+        }
+        List<String> strings = new ArrayList<>(receiverSet.size());
+        strings.addAll(receiverSet);
+        return strings;
+    }
+
+    public static void addReceiver(String sender,List<String> list){
+        receiverHashMap.get(sender).addAll(list);
+    }
 }

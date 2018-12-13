@@ -2,23 +2,33 @@ package demo.util;
 
 import common.ObserverCenter;
 import data.PacketEntity;
+import demo.common.Common;
 import demo.model.PacketModel;
+import demo.util.menu.MenuCallback;
+import demo.util.menu.TempMenu;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.util.Pair;
 import org.jnetpcap.packet.PcapPacket;
 import packet.PacketCaptureServiceProxy;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -71,7 +81,6 @@ public class AlertUtils {
                 alert.close();
             }
         });
-
         gridPane.add(btnConfirm,0,2,2,2);
         alert.getDialogPane().setContent(gridPane);
         alert.show();
@@ -208,6 +217,57 @@ public class AlertUtils {
         result.ifPresent(usernamePassword -> {
             System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
         });
+    }
+
+    public static void showMyAlert(String title,String sender){
+        List<String> allInterfaceNameList = new ArrayList<>(PacketCaptureServiceProxy.getAllInterfacesName());
+        //移除本身
+        allInterfaceNameList.remove(sender);
+        Alert alert = initDialog(title,null,null, Alert.AlertType.INFORMATION);
+        try {
+            final BorderPane borderPane = (BorderPane) FXMLLoader.load(AlertUtils.class.getClassLoader().getResource("views/dialog/sender_dialog.fxml"));
+            ListView<String> senderList = (ListView<String>) borderPane.lookup("#send_dialog_sender");
+            ObservableList<String> observableSender = FXCollections.observableList(Collections.singletonList(sender));
+            senderList.setItems(observableSender);
+            ListView<String> reveiverList = (ListView<String>) borderPane.lookup("#sender_dialog_receiver");
+            ObservableList<String> observableReceiver = FXCollections.observableList(Common.getReceiverList(sender));
+            reveiverList.setItems(observableReceiver);
+
+            //button
+            Button btnAddReceiver = (Button) borderPane.lookup("#sender_dialog_btn_add_receiver");
+            btnAddReceiver.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    TempMenu.getInstance("dispatcher_dialog"+sender).init(allInterfaceNameList)
+                            .addListener(new MenuCallback() {
+                                @Override
+                                public void callback(String menuId, Object t) {
+                                    observableReceiver.add(menuId);
+                                    allInterfaceNameList.remove(menuId);//移除已经添加
+                                    TempMenu.getInstance("dispatcher_dialog"+sender).reflash(allInterfaceNameList);
+                                }
+                            }).show(borderPane,event.getScreenX(),event.getScreenY());
+                }
+            });
+            Button btn_send_packet = (Button)borderPane.lookup("#send_packet");
+            btn_send_packet.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+
+                }
+            });
+
+            alert.setOnCloseRequest(new EventHandler<DialogEvent>() {
+                @Override
+                public void handle(DialogEvent event) {
+                    Common.addReceiver(sender,observableReceiver);
+                }
+            });
+            alert.getDialogPane().setContent(borderPane);
+            alert.showAndWait();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

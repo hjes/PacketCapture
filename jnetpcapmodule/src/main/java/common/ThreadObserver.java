@@ -17,11 +17,9 @@ public class ThreadObserver {
     }
 
     public void notifyNow(){
-        while (!isWait){
-            System.err.println("waiting for notify");
-        }
+        if (!isWait)
+            System.out.println("has not capture a packet, so can't notify");
         synchronized (this){
-            System.out.println("notify");
             this.notify();
         }
     }

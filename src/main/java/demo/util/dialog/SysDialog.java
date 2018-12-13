@@ -22,6 +22,8 @@ public class SysDialog {
             heapMax.setText(String.valueOf(sysInfoBean.getMemoryInfo().getHeadMax()));
             nonHeapUsage.setText(String.valueOf(sysInfoBean.getMemoryInfo().getNonHeapUsage()));
             nonHeapMax.setText(String.valueOf(sysInfoBean.getMemoryInfo().getNonHeapMax()));
+            popup.setAnchorX(x);
+            popup.setAnchorY(y);
             popup.show(stage);
             return;
         }
@@ -54,14 +56,14 @@ public class SysDialog {
         gridPane.add(text4,0,4);
         gridPane.add(nonHeapMax,1,4);
         popup.getContent().add(gridPane);
+        popup.setAnchorX(x);
+        popup.setAnchorY(y);
         gridPane.setOnMouseExited(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 popup.hide();
             }
         });
-        gridPane.setLayoutX(x);
-        gridPane.setLayoutY(y);
         popup.show(stage);
     }
 }

@@ -26,7 +26,7 @@
         <TilePane.margin>
           <Insets left="10"/>
         </TilePane.margin>
-      <ImageView fitHeight="10" fitWidth="10">
+      <ImageView fitHeight="20" fitWidth="20">
         <Image url="/image/notification-pane-warning.png"/>
       </ImageView>
       </StackPane>
@@ -53,6 +53,10 @@
           <VBox spacing="5" alignment="CENTER">
             <Text text="丢包率"  style="-fx-text-fill: #2b1656"/>
             <Button fx:id="home_btn_lose_rate" text="0" textAlignment="CENTER" prefWidth="100"/>
+          </VBox>
+          <VBox spacing="5" alignment="CENTER">
+            <Text text="停止"  style="-fx-text-fill: #2b1656"/>
+            <Button fx:id="home_btn_stop_thread" text="stop" textAlignment="CENTER" prefWidth="100"/>
           </VBox>
           <Button fx:id="home_btn_flash" text="刷新" alignment="CENTER" prefWidth="100"/>
           <HBox alignment="CENTER_RIGHT" style="-fx-border-color: BLACK;-fx-padding: 5">

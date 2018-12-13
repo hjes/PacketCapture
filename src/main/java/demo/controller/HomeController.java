@@ -8,16 +8,19 @@ import data.PacketWrapper;
 import demo.App;
 import demo.model.ListViewModel;
 import demo.util.DialogUtils;
-import demo.util.GlobalMenu;
+import demo.util.menu.GlobalMenu;
 import demo.model.PacketModel;
 import demo.mvc.AbstractController;
 import demo.repository.HomeRepository;
 import demo.util.AlertUtils;
+import demo.util.menu.MenuCallback;
+import demo.util.menu.TempMenu;
 import io.datafx.controller.ViewController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,6 +40,7 @@ import java.util.*;
 import java.util.function.Function;
 
 import static common.Common.CaptureThreadState.CONSUME;
+import static common.Common.CaptureThreadState.WAITING;
 import static common.Common.PACKET_LOSE_EVENT;
 
 /**
@@ -76,6 +80,8 @@ public class HomeController extends AbstractController<HomeRepository> {
     private Button home_btn_clear_textarea;
     @FXML
     private StackPane home_img_notification;
+    @FXML
+    private Button home_btn_stop_thread;
 
     //当前已经抓到的包的数量，用于填充packetID
     private long packetNumber = 0;
@@ -119,6 +125,33 @@ public class HomeController extends AbstractController<HomeRepository> {
                    }
                 });
 
+        //TODO TempMenu优化
+        home_list_interface.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (event.getButton() == MouseButton.SECONDARY){
+                    TempMenu.getInstance(currentChosenInterface).init(Arrays.asList("details","sender"))
+                            .addListener(new MenuCallback() {
+                        @Override
+                        public void callback(String menuId, Object t) {
+                            switch (menuId){
+                                case "details":
+                                    AlertUtils.showMyAlert("接口细节",currentChosenInterface);
+                                    break;
+                                case "send":
+                                    AlertUtils.showMyAlert("发送设置",currentChosenInterface);
+                                    break;
+                            }
+                        }
+                    }).show(home_list_interface,event.getScreenX(),event.getScreenY());
+                }else{
+                    if (currentChosenInterface!=null){
+                        TempMenu.getInstance(currentChosenInterface).hide();
+                    }
+                }
+            }
+        });
+
         //开始抓包
         home_btn_start_capturing.setOnMouseClicked(event -> {
             if (currentChosenInterface==null) {
@@ -160,12 +193,22 @@ public class HomeController extends AbstractController<HomeRepository> {
                 }
             }
         });
+        //停止线程
+        home_btn_stop_thread.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                PacketCaptureServiceProxy.setPacketCaptureThreadState(currentChosenInterface,Common.CaptureThreadState.QUIT);
+                PacketCaptureServiceProxy.setPacketCaptureThreadState(currentChosenInterface,WAITING);
+                hasOpenInterfaceName.remove(currentChosenInterface);
+                home_btn_start_capturing.setText("START");
+            }
+        });
 
         //图像
         home_img_notification.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                DialogUtils.showSysInfoDialog(App.stage,event.getX(),event.getY(), demo.common.Common.getSysInfo());
+                DialogUtils.showSysInfoDialog(App.stage,event.getScreenX(),event.getScreenY(), demo.common.Common.getSysInfo());
             }
         });
 
@@ -262,7 +305,8 @@ public class HomeController extends AbstractController<HomeRepository> {
                             currentPcapPacket = row.getItem().getPcapPacket();
                             //
                         }else if(event.getClickCount()==1&&event.getButton()==MouseButton.SECONDARY){
-                            GlobalMenu.getInstance().setObject(row.getItem()).show(home_table_packet,event.getScreenX(),event.getScreenY());
+                            GlobalMenu.getInstance().setObject(row.getItem()).show(home_table_packet,event.getScreenX(),event.getScreenY() );
+
                         }else{
                             GlobalMenu.getInstance().hide();
                         }
