@@ -1,11 +1,10 @@
-package packet;
+package packet.processor;
 
 import common.Common;
 import common.Observer;
 import common.ObserverCenter;
 import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
-import packet.interfaces.PacketProcessor;
 
 import java.util.LinkedList;
 import java.util.List;

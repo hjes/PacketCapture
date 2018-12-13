@@ -22,6 +22,6 @@ public class HomeRepository extends AbstractRepository {
 
     public void pauseAutoFlash(){
         timer.cancel();
-        timer.purge();
+        timer = null;
     }
 }

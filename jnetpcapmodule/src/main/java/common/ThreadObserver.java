@@ -13,13 +13,15 @@ public class ThreadObserver {
                 }
             }
         }
+        isWait = false;
     }
 
     public void notifyNow(){
         while (!isWait){
-            System.err.println("waiting");
+            System.err.println("waiting for notify");
         }
         synchronized (this){
+            System.out.println("notify");
             this.notify();
         }
     }

@@ -1,10 +1,12 @@
 package packet;
 
+import common.ObserverCenter;
 import common.ThreadObserver;
 import data.PacketWrapper;
 import filter.MultiPacketFilter;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
+import packet.processor.PacketProcessor;
 
 public class PacketHandler<T> implements PcapPacketHandler<T> {
 
@@ -12,9 +14,15 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
     private MultiPacketFilter multiPacketFilter;//包过滤器
     private ThreadObserver threadObserver = new ThreadObserver();
     private boolean needWait = false;
+    private boolean stopService = false;
+    private String interfaceName;
 
     public void start(){
         processorAndObserveThread.start();
+    }
+
+    public PacketHandler(String interfaceName){
+        this.interfaceName = interfaceName;
     }
 
     /**
@@ -48,6 +56,18 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
         needWait = false;
         threadObserver.notifyNow();
     }
+    public void setStop(){
+        processorAndObserveThread.stopService();
+        if (needWait){
+            threadObserver.notifyNow();
+            stopService = true;
+            needWait = false;
+        }
+    }
+
+    public void addProcessor(PacketProcessor packetProcessor){
+        processorAndObserveThread.addProcessor(packetProcessor);
+    }
 
     @Override
     public void nextPacket(PcapPacket packet, T user) {
@@ -68,16 +88,21 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
          */
         //找到合适的packet就添加到队列中发送出去
         // packageSender.process(packet);
-        if (needWait)
-            threadObserver.waitNow();
+        try {
+            if (stopService)
+                throw new InterruptedException("stop service");
+            if (needWait)//TODO 这里的暂停只是把包阻塞在那里，consume之后之前的包还是会全部重新塞进去 加一个跳包的功能，即不往队列里面加就好了
+                threadObserver.waitNow();
 
-        if (multiPacketFilter!=null)//如果满足过滤要求则对该包进行处理
-        {
-            if (multiPacketFilter.packetFilter(packet))
+            if (multiPacketFilter != null)//如果满足过滤要求则对该包进行处理
+            {
+                if (multiPacketFilter.packetFilter(packet))
+                    processorAndObserveThread.process(new PacketWrapper(packet));
+            } else {//不设置过滤器
                 processorAndObserveThread.process(new PacketWrapper(packet));
-        }
-        else{//不设置过滤器
-            processorAndObserveThread.process(new PacketWrapper(packet));
+            }
+        }catch (InterruptedException e){
+            ObserverCenter.notifyLogging(interfaceName + " --stop service");
         }
 
         /*

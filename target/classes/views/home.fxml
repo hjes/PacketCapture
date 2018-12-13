@@ -48,7 +48,7 @@
         <VBox alignment="CENTER" spacing="20">
           <VBox spacing="5" alignment="CENTER">
             <Text text="开始抓包"  style="-fx-text-fill: #2b1656"/>
-            <Button fx:id="home_btn_start_capturing" text="start>>" textAlignment="CENTER" prefWidth="100"/>
+            <Button fx:id="home_btn_start_capturing" text="start" textAlignment="CENTER" prefWidth="100"/>
           </VBox>
           <VBox spacing="5" alignment="CENTER">
             <Text text="丢包率"  style="-fx-text-fill: #2b1656"/>
@@ -71,15 +71,15 @@
           <VBox.margin><Insets bottom="2" /></VBox.margin>
           <columns>
             <TableColumn fx:id="packetIDColumn" style="-fx-alignment: CENTER"
-                                text="id"  prefWidth="50" resizable="false"/>
+                                text="id"  prefWidth="50"/>
             <TableColumn fx:id="packetTimeColumn" style="-fx-alignment: CENTER"
-                                text="time" prefWidth="150" resizable="false"/>
+                                text="time" prefWidth="150"/>
             <TableColumn fx:id="packetLengthColumn" style="-fx-alignment: CENTER"
-                                text="length" prefWidth="50" resizable="false"/>
+                                text="length" prefWidth="50" />
             <TableColumn fx:id="packetProtocolColumn" style="-fx-alignment: CENTER"
-                                text="protocol" prefWidth="150" resizable="false"/>
+                                text="protocol" prefWidth="150"/>
             <TableColumn fx:id="packetInfoColumn" style="-fx-alignment: CENTER"
-                         text="protocol" prefWidth="200" resizable="false"/>
+                         text="info" prefWidth="200" />
           </columns>
         </TableView>
       </VBox>

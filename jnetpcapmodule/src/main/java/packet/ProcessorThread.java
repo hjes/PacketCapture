@@ -3,7 +3,7 @@ package packet;
 import common.ObserverCenter;
 import data.PacketWrapper;
 import org.jnetpcap.packet.PcapPacket;
-import packet.interfaces.PacketProcessor;
+import packet.processor.PacketProcessor;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -16,12 +16,12 @@ import static common.Common.PACKET_LOSE_EVENT;
  * 处理包的线程
  */
 public class ProcessorThread extends Thread implements PacketProcessor {
-    //TODO 这里的设计需要修改，把所有的服务都交给proxy，而不是让用户单独去调用
-    private static List<PacketProcessor> packetProcessorList = new LinkedList<>();
+    private List<PacketProcessor> packetProcessorList = new LinkedList<>();
     private double currentSize;
     private double lossSize;
     private int totalSize = 1500;
     private LinkedBlockingQueue<PcapPacket> pcapPacketConcurrentLinkedQueue = new LinkedBlockingQueue<>(totalSize);
+    private boolean stopService = false;
 
     public void pauseTheThread(){
 
@@ -58,26 +58,37 @@ public class ProcessorThread extends Thread implements PacketProcessor {
      */
     @Override
     public void run() {
-        for (;;){
-            PcapPacket tempPcapPacket = null;
-            try {
-                tempPcapPacket = pcapPacketConcurrentLinkedQueue.take();
-            } catch (InterruptedException e) {
-                ObserverCenter.notifyObservers(this.getClass().getName(),e.toString() + "\n" + " in ProcessorThread");
-            }
-            //将抓取到的包传递给process进行处理
-            if (tempPcapPacket!=null)
-                for (PacketProcessor packetProcessor:packetProcessorList){
-                    packetProcessor.process(new PacketWrapper(tempPcapPacket).addObject(PacketWrapper.TIME,new Date()));
+        try {
+            for (; ; ) {
+                if (stopService){
+                    throw new InterruptedException("process thread stop!");
                 }
+                PcapPacket tempPcapPacket = null;
+                try {
+                    tempPcapPacket = pcapPacketConcurrentLinkedQueue.take();
+                } catch (InterruptedException e) {
+                    ObserverCenter.notifyObservers(this.getClass().getName(), e.toString() + "\n" + " in ProcessorThread");
+                }
+                //将抓取到的包传递给process进行处理
+                if (tempPcapPacket != null)
+                    for (PacketProcessor packetProcessor : packetProcessorList) {
+                        packetProcessor.process(new PacketWrapper(tempPcapPacket).addObject(PacketWrapper.TIME, new Date()));
+                    }
+            }
+        }catch (InterruptedException e){
+            ObserverCenter.notifyLogging(e.toString());
         }
     }
 
     /**
      * @param packetProcessor 添加处理器
      */
-    public static void addProcessor(PacketProcessor packetProcessor){
+    public void addProcessor(PacketProcessor packetProcessor){
         packetProcessorList.add(packetProcessor);
+    }
+
+    public void stopService(){
+        stopService = true;
     }
 
 }

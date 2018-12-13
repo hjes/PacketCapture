@@ -2,9 +2,12 @@ package demo.controller;
 
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTreeTableColumn;
+import common.Common;
 import common.ObserverCenter;
 import data.PacketWrapper;
+import demo.App;
 import demo.model.ListViewModel;
+import demo.util.DialogUtils;
 import demo.util.GlobalMenu;
 import demo.model.PacketModel;
 import demo.mvc.AbstractController;
@@ -26,14 +29,14 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
 import org.jnetpcap.packet.PcapPacket;
-import packet.PacketCapture;
 import packet.PacketCaptureServiceProxy;
-import packet.ProcessorThread;
+import packet.processor.PacketProcessor;
 
 
 import java.util.*;
 import java.util.function.Function;
 
+import static common.Common.CaptureThreadState.CONSUME;
 import static common.Common.PACKET_LOSE_EVENT;
 
 /**
@@ -87,6 +90,7 @@ public class HomeController extends AbstractController<HomeRepository> {
     //
     private ListViewModel<PacketModel> packetModelListViewModel;
     //
+    private PcapPacket currentPcapPacket;
 
     @Override
     public void init(){
@@ -104,37 +108,64 @@ public class HomeController extends AbstractController<HomeRepository> {
                  String new_val) -> {
                     ObserverCenter.notifyLogging("choose interface : " + ov.getValue());
                    currentChosenInterface = ov.getValue();
-                   //如果该接口已经打开，那么将按钮disable
+                   //如果该接口已经打开
                    if (hasOpenInterfaceName.contains(currentChosenInterface)){
-                       home_btn_start_capturing.setDisable(true);
+                       switch (PacketCaptureServiceProxy.getThreadState(currentChosenInterface)){
+                           case Common.CaptureThreadState.CONSUME:home_btn_start_capturing.setText("RUNNING");break;
+                           case Common.CaptureThreadState.PAUSE:home_btn_start_capturing.setText("PAUSE");break;
+                       }
                    }else{
-                       home_btn_start_capturing.setDisable(false);
+                       home_btn_start_capturing.setText("START");
                    }
                 });
+
         //开始抓包
         home_btn_start_capturing.setOnMouseClicked(event -> {
             if (currentChosenInterface==null) {
                 AlertUtils.showWaring("警告", "没有选择任何的接口");
                 return;
             }
-            if (hasOpenInterfaceName.contains(currentChosenInterface)) {
-                AlertUtils.showWaring("警告", "该接口正在接收数据");
-                return;
+            if (!hasOpenInterfaceName.contains(currentChosenInterface)) {
+                //TODO 打开设备
+                ObserverCenter.notifyLogging("is opening interface : " + currentChosenInterface);
+                startCapture(currentChosenInterface);
+                ObserverCenter.notifyLogging("has open interface : " + currentChosenInterface );
+                System.out.println("has open device : " + currentChosenInterface);
+                home_btn_start_capturing.setText("RUNNING");
+                hasOpenInterfaceName.add(currentChosenInterface);
+                //抓包到主界面更新，抓包成功后回调该接口
+                PacketCaptureServiceProxy.addProcessor(currentChosenInterface, new PacketProcessor() {
+                    @Override
+                    public void process(PacketWrapper packetWrapper) {
+                        //TODO 链接
+                        packetModelListViewModel.add(new PacketModel(String.valueOf(packetNumber),
+                                ((Date)packetWrapper.getObject(PacketWrapper.TIME)).toString(),
+                                packetWrapper.getPcapPacket(),null));
+                        packetNumber++;
+                        if (packetNumber%100==0&&packetNumber!=0)
+                            ObserverCenter.notifyLogging("has capture : " + packetNumber);
+                    }
+                });
+            }else{
+                switch (PacketCaptureServiceProxy.getThreadState(currentChosenInterface)){
+                    case CONSUME:PacketCaptureServiceProxy.setPacketCaptureThreadState(currentChosenInterface
+                    ,Common.CaptureThreadState.PAUSE);
+                    home_btn_start_capturing.setText("CONSUME");
+                    break;
+                    case Common.CaptureThreadState.PAUSE:PacketCaptureServiceProxy.setPacketCaptureThreadState(currentChosenInterface
+                    ,CONSUME);
+                    home_btn_start_capturing.setText("PAUSE");
+                    break;
+                    default:System.out.println("null state" + currentChosenInterface + PacketCaptureServiceProxy.getThreadState(currentChosenInterface));
+                }
             }
-            //TODO 打开设备
-            ObserverCenter.notifyLogging("is opening interface : " + currentChosenInterface);
-            startCapture(currentChosenInterface);
-            ObserverCenter.notifyLogging("has open interface : " + currentChosenInterface );
-            System.out.println("has open device : " + currentChosenInterface);
-            home_btn_start_capturing.setDisable(true);
-            hasOpenInterfaceName.add(currentChosenInterface);
         });
 
         //图像
         home_img_notification.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
+                DialogUtils.showSysInfoDialog(App.stage,event.getX(),event.getY(), demo.common.Common.getSysInfo());
             }
         });
 
@@ -152,17 +183,24 @@ public class HomeController extends AbstractController<HomeRepository> {
             ObserverCenter.notifyLogging("manual refresh");
         });
 
+        repository.setAutoFlashPeriodTime(1000,3000,new demo.repository.Callback<Object>() {
+            @Override
+            public void callback(Object o) {
+                home_table_packet.refresh();
+            }
+        });
+
         home_ckbox_auto_flash.selectedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
                 if (observable.getValue()){//如果选中
-                    repository.setAutoFlashPeriodTime(1000, 5000, new demo.repository.Callback<Object>() {
+                    repository.setAutoFlashPeriodTime(1000, 3000, new demo.repository.Callback<Object>() {
                         @Override
                         public void callback(Object o) {
                             home_table_packet.refresh();
                         }
                     });
-                    ObserverCenter.notifyLogging("auto refreshing..." + 5 + " seconds");
+                    ObserverCenter.notifyLogging("auto refreshing..." + 3 + " seconds");
                 }else{                      //如果没选中
                     repository.pauseAutoFlash();
                 }
@@ -173,20 +211,6 @@ public class HomeController extends AbstractController<HomeRepository> {
 
         setupPacketTableView();
 
-        //抓包到主界面更新，抓包成功后回调该接口
-        ProcessorThread.addProcessor(packetWrapper -> Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                //TODO 链接
-                packetModelListViewModel.add(new PacketModel(String.valueOf(packetNumber),
-                                ((Date)packetWrapper.getObject(PacketWrapper.TIME)).toString(),
-                                String.valueOf(packetWrapper.getPcapPacket().getTotalSize()),
-                                "TCP",null)) ;
-                packetNumber++;
-                if (packetNumber%100==0&&packetNumber!=0)
-                    ObserverCenter.notifyLogging("has capture : " + packetNumber);
-            }
-        }));
         //为丢包事件注册监听器，发生丢包时回调该接口
         ObserverCenter.register(PACKET_LOSE_EVENT, s -> Platform.runLater(() -> {
             home_btn_lose_rate.setText(s);//主线程更新UI
@@ -208,7 +232,6 @@ public class HomeController extends AbstractController<HomeRepository> {
                     break;
             }
         });
-
         //
         ObserverCenter.notifyLogging("初始化成功");
     }
@@ -236,7 +259,8 @@ public class HomeController extends AbstractController<HomeRepository> {
                     public void handle(MouseEvent event) {
                         System.out.println(event.getSource());
                         if (event.getClickCount()==2){
-                            AlertUtils.showException(new NullPointerException());
+                            currentPcapPacket = row.getItem().getPcapPacket();
+                            //
                         }else if(event.getClickCount()==1&&event.getButton()==MouseButton.SECONDARY){
                             GlobalMenu.getInstance().setObject(row.getItem()).show(home_table_packet,event.getScreenX(),event.getScreenY());
                         }else{

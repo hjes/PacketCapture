@@ -16,15 +16,15 @@ public class Common {
         //用于获取堆内存的使用情况和非堆内存的使用情况
         MemoryMXBean bean = ManagementFactory.getMemoryMXBean();
         SysInfoBean.MemoryInfo memoryInfo = new SysInfoBean.MemoryInfo();
-        memoryInfo.setHeadUsage(bean.getHeapMemoryUsage().getUsed());
-        memoryInfo.setHeadMax(bean.getHeapMemoryUsage().getMax());
-        memoryInfo.setNonHeapMax(bean.getNonHeapMemoryUsage().getMax());
-        memoryInfo.setNonHeapUsage(bean.getNonHeapMemoryUsage().getUsed());
+        memoryInfo.setHeadUsage((long)(bean.getHeapMemoryUsage().getUsed()/1024.0/1024.0));
+        memoryInfo.setHeadMax((long)(bean.getHeapMemoryUsage().getMax()/1024.0/1024.0));
+        memoryInfo.setNonHeapMax((long)(bean.getNonHeapMemoryUsage().getMax()/1024.0/1024.0));
+        memoryInfo.setNonHeapUsage((long)(bean.getNonHeapMemoryUsage().getUsed()/1024.0/1024.0));
         sysInfoBean.setMemoryInfo(memoryInfo);
         return sysInfoBean;
     }
 
 
-    //TODO Java动态运行代码
+    //TODO Java动态运行代码 从class文件中加载filter和process
 
 }

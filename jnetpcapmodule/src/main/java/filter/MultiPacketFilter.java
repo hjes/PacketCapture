@@ -10,8 +10,13 @@ public class MultiPacketFilter implements PacketFilter {
     //TODO 有没有可能多线程往这里面加过滤器
     private LinkedList<PacketFilter> packetFilterLinkedList =  new LinkedList<>();
 
+    //过滤器名字和具体过滤器的对应关系
     private HashMap<String,PacketFilter> filterHashMap = new HashMap<>();
 
+    /**
+     * 添加多个filter
+     * @param filterNames 过滤器的名字集合
+     */
     public void addPacketFilters(String[] filterNames){
         PacketFilter packetFilter = null;
         for (String filterName:filterNames){
@@ -26,10 +31,18 @@ public class MultiPacketFilter implements PacketFilter {
         }
     }
 
+    /**
+     * 添加单个过滤器
+     * @param filterName 过滤器的名字
+     */
     public void addPacketFilter(String filterName){
         addPacketFilters(new String[]{filterName});
     }
 
+    /**
+     * 获取当前所有过滤器的名字集合
+     * @return
+     */
     public String[] getAllFilterName(){
         if (filterHashMap==null)
             return new String[0];
@@ -43,10 +56,18 @@ public class MultiPacketFilter implements PacketFilter {
         return strings;
     }
 
+    /**
+     * 获得所有的过滤器
+     * @return
+     */
     public LinkedList<PacketFilter> getAllFilters(){
         return packetFilterLinkedList;
     }
 
+    /**
+     * 根据前一个多过滤器添加到一个新的多过滤器中
+     * @param multiPacketFilter
+     */
     public void addAll(MultiPacketFilter multiPacketFilter){
         for (PacketFilter packetFilter:multiPacketFilter.getAllFilters()){
             if (!filterHashMap.containsKey(packetFilter.getFilterName())) {
@@ -56,6 +77,11 @@ public class MultiPacketFilter implements PacketFilter {
         }
     }
 
+    /**
+     * 根据名字获得过滤器
+     * @param filterName
+     * @return
+     */
     private PacketFilter getTheCorrectFilter(String filterName){
         PacketFilter packetFilter = null;
         boolean hasAddedTheFilter = true;
@@ -80,6 +106,10 @@ public class MultiPacketFilter implements PacketFilter {
         return packetFilter;
     }
 
+    /**
+     * 移除过滤器
+     * @param removeFilterList
+     */
     public void removeFilter(List<String> removeFilterList){
         for (String string:removeFilterList){
             packetFilterLinkedList.remove(filterHashMap.get(string));

@@ -1,6 +1,7 @@
 package packet;
 
 import org.jnetpcap.Pcap;
+import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapDumper;
 import org.jnetpcap.PcapIf;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class PacketCapture {
-    public static List<String> capturingInterfaces = new ArrayList<>(5);
+    public static final List<String> capturingInterfaces = new ArrayList<>(5);
 
     /**
      * 根据接口index获取设备
@@ -93,7 +94,9 @@ public class PacketCapture {
             return;
         }
 
-        capturingInterfaces.add(interfaceName);
+        synchronized (capturingInterfaces) {
+            capturingInterfaces.add(interfaceName);
+        }
 
         //PacketHandler处理
         /***************************************************************************

@@ -3,6 +3,7 @@ package demo.model;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.jnetpcap.packet.PcapPacket;
 
 public class PacketModel extends RecursiveTreeObject<PacketModel> {
     final StringProperty id;
@@ -10,6 +11,12 @@ public class PacketModel extends RecursiveTreeObject<PacketModel> {
     final StringProperty packetProtocol;
     final StringProperty packetTime;
     final StringProperty packetInfo;
+    private PcapPacket pcapPacket;
+
+    public PacketModel(String id,String packetTime,PcapPacket pcapPacket,String info){
+        this(id,packetTime,String.valueOf(pcapPacket.getTotalSize()),pcapPacket.getCaptureHeader().getStructName(),null);
+        this.pcapPacket = pcapPacket;
+    }
 
     public PacketModel(String id,String packetTime,String packetLength,String packetProtocol,String packetInfo){
         this.id = new SimpleStringProperty(id);
@@ -33,4 +40,8 @@ public class PacketModel extends RecursiveTreeObject<PacketModel> {
     public StringProperty packetTimeProperty(){return packetTime;}
 
     public StringProperty packetInfoProperty(){return packetInfo;}
+
+    public PcapPacket getPcapPacket() {
+        return pcapPacket;
+    }
 }

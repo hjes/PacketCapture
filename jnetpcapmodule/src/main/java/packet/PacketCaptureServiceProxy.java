@@ -1,17 +1,17 @@
 package packet;
 
+import common.Common.CaptureThreadState;
 import common.ObserverCenter;
 import data.Data;
 import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.PcapIf;
+import packet.processor.PackageSender;
+import packet.processor.PacketProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static packet.PacketCaptureServiceProxy.CaptureThreadState.PAUSE;
-
 
 /**
  *
@@ -23,15 +23,9 @@ public class PacketCaptureServiceProxy{
     private static List<String> interfaceDetails;
     private static HashMap<String,PacketCaptureThread> packetCaptureThreadHashMap = new HashMap<>(5);
 
-    public static final class CaptureThreadState{
-        public static int PAUSE = 1;
-        public static int CONSUME = 2;
-        public static int QUIT = 3;
-    }
     /**
      * @param interfaceName 接口名
      * @param data 数据
-     * @return 数据是否添加到队列
      */
     public static void sendSomeData(String interfaceName,Data data) {
         getPacketSender(interfaceName).process(new PacketWrapper(data.getPacket()));
@@ -114,8 +108,30 @@ public class PacketCaptureServiceProxy{
             return;
         }
         switch (state){
-            case PAUSE:
+            case CaptureThreadState.PAUSE:packetCaptureThread.pause();break;
+            case CaptureThreadState.CONSUME:packetCaptureThread.consume();break;
+            case CaptureThreadState.QUIT:packetCaptureThread.stopService();break;
+            default:System.err.println("state : " + state + " not define");
         }
     }
 
+    public static int getThreadState(String interfaceName){
+        if (packetCaptureThreadHashMap.get(interfaceName)!=null)
+            return packetCaptureThreadHashMap.get(interfaceName).getServiceState();
+        else
+            return CaptureThreadState.WAITING;
+    }
+
+    public static void addFilterIntoInterface(String interfaceName,String[] filterName){
+        if (packetCaptureThreadHashMap.get(interfaceName)==null)
+            return;
+        for (String string:filterName){
+            packetCaptureThreadHashMap.get(interfaceName).addFilterIntoInterface(string);
+        }
+    }
+    public static void addProcessor(String interfaceName, PacketProcessor packetProcessor){
+        if (packetCaptureThreadHashMap.get(interfaceName)==null)
+            return;
+        packetCaptureThreadHashMap.get(interfaceName).addProcessor(packetProcessor);
+    }
 }
