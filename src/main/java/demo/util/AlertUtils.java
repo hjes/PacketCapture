@@ -2,8 +2,10 @@ package demo.util;
 
 import common.ObserverCenter;
 import data.PacketEntity;
+import data.PacketWrapper;
 import demo.common.Common;
 import demo.model.PacketModel;
+import demo.packet.PacketTableProcessModel;
 import demo.util.menu.MenuCallback;
 import demo.util.menu.TempMenu;
 import javafx.application.Platform;
@@ -23,6 +25,7 @@ import javafx.scene.layout.Priority;
 import javafx.util.Pair;
 import org.jnetpcap.packet.PcapPacket;
 import packet.PacketCaptureServiceProxy;
+import packet.processor.PacketProcessor;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -253,7 +256,16 @@ public class AlertUtils {
             btn_send_packet.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-
+                    PacketCaptureServiceProxy.addProcessor(sender, new PacketTableProcessModel(
+                            demo.common.Common.getTableDataByInterfaceName(sender).getPacketModelListViewModel()
+                            ,sender
+                    ) {
+                        @Override
+                        public void process(PacketWrapper packetWrapper) {
+                            for (String receiveInterface:observableReceiver)
+                                PacketCaptureServiceProxy.getPacketSender(receiveInterface).sendDatas(packetWrapper.getPcapPacket());
+                        }
+                    });
                 }
             });
 
@@ -263,6 +275,7 @@ public class AlertUtils {
                     Common.addReceiver(sender,observableReceiver);
                 }
             });
+
             alert.getDialogPane().setContent(borderPane);
             alert.showAndWait();
         } catch (IOException e) {

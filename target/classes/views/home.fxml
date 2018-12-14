@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.TilePane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
+<?import javafx.scene.control.ChoiceBox?>
 <BorderPane fx:id="root" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1000" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
   <top>
     <TilePane style="-fx-padding: 5 0 5 0">
@@ -48,7 +49,7 @@
         <VBox alignment="CENTER" spacing="20">
           <VBox spacing="5" alignment="CENTER">
             <Text text="开始抓包"  style="-fx-text-fill: #2b1656"/>
-            <Button fx:id="home_btn_start_capturing" text="start" textAlignment="CENTER" prefWidth="100"/>
+            <Button fx:id="home_btn_start_capturing" text="START" textAlignment="CENTER" prefWidth="100"/>
           </VBox>
           <VBox spacing="5" alignment="CENTER">
             <Text text="丢包率"  style="-fx-text-fill: #2b1656"/>
@@ -56,7 +57,7 @@
           </VBox>
           <VBox spacing="5" alignment="CENTER">
             <Text text="停止"  style="-fx-text-fill: #2b1656"/>
-            <Button fx:id="home_btn_stop_thread" text="stop" textAlignment="CENTER" prefWidth="100"/>
+            <Button fx:id="home_btn_stop_thread" text="STOP" textAlignment="CENTER" prefWidth="100"/>
           </VBox>
           <Button fx:id="home_btn_flash" text="刷新" alignment="CENTER" prefWidth="100"/>
           <HBox alignment="CENTER_RIGHT" style="-fx-border-color: BLACK;-fx-padding: 5">
@@ -70,6 +71,7 @@
       <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
         </Text>
+        <VBox spacing="5" alignment="BOTTOM_RIGHT">
         <TableView fx:id="home_table_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0);-fx-text-alignment: CENTER"
                           VBox.vgrow="ALWAYS">
           <VBox.margin><Insets bottom="2" /></VBox.margin>
@@ -86,12 +88,17 @@
                          text="info" prefWidth="200" />
           </columns>
         </TableView>
+          <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 5 5 5 0 ">
+            <Text text="选择数据接口"/>
+            <ChoiceBox fx:id="home_choice_box_receive_interface"/>
+          </HBox>
+        </VBox>
       </VBox>
     </HBox>
   </center>
   <bottom>
     <HBox alignment="CENTER_LEFT">
-    <ScrollPane prefWidth="500">
+    <ScrollPane prefWidth="600">
           <TextArea fx:id="home_textarea_logging" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="850"
           promptText="logging"/>
     </ScrollPane>

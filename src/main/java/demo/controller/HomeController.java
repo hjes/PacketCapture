@@ -7,6 +7,7 @@ import common.ObserverCenter;
 import data.PacketWrapper;
 import demo.App;
 import demo.model.ListViewModel;
+import demo.packet.PacketTableProcessModel;
 import demo.util.DialogUtils;
 import demo.util.menu.GlobalMenu;
 import demo.model.PacketModel;
@@ -31,6 +32,7 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Callback;
+import javafx.util.StringConverter;
 import org.jnetpcap.packet.PcapPacket;
 import packet.PacketCaptureServiceProxy;
 import packet.processor.PacketProcessor;
@@ -82,9 +84,9 @@ public class HomeController extends AbstractController<HomeRepository> {
     private StackPane home_img_notification;
     @FXML
     private Button home_btn_stop_thread;
+    @FXML
+    private ChoiceBox<String> home_choice_box_receive_interface;
 
-    //当前已经抓到的包的数量，用于填充packetID
-    private long packetNumber = 0;
     //table 内容
     private ObservableList<PacketModel> dummyData;
     //当前停留的接口
@@ -94,9 +96,8 @@ public class HomeController extends AbstractController<HomeRepository> {
     //
     private ObservableList<String> nameList;
     //
-    private ListViewModel<PacketModel> packetModelListViewModel;
-    //
     private PcapPacket currentPcapPacket;
+
 
     @Override
     public void init(){
@@ -136,9 +137,11 @@ public class HomeController extends AbstractController<HomeRepository> {
                         public void callback(String menuId, Object t) {
                             switch (menuId){
                                 case "details":
-                                    AlertUtils.showMyAlert("接口细节",currentChosenInterface);
+                                    for (String infoRs:PacketCaptureServiceProxy.getAllInterfaceDetails()){
+                                        System.out.println(infoRs);
+                                    }
                                     break;
-                                case "send":
+                                case "sender":
                                     AlertUtils.showMyAlert("发送设置",currentChosenInterface);
                                     break;
                             }
@@ -167,16 +170,21 @@ public class HomeController extends AbstractController<HomeRepository> {
                 home_btn_start_capturing.setText("RUNNING");
                 hasOpenInterfaceName.add(currentChosenInterface);
                 //抓包到主界面更新，抓包成功后回调该接口
-                PacketCaptureServiceProxy.addProcessor(currentChosenInterface, new PacketProcessor() {
+                PacketCaptureServiceProxy.addProcessor(currentChosenInterface, new PacketTableProcessModel(
+                        //这个地方如果当前的接口还没有创建表关联，会在get方法中创建然后返回实例
+                        demo.common.Common.getTableDataByInterfaceName(currentChosenInterface).getPacketModelListViewModel()
+                ,currentChosenInterface) {
                     @Override
                     public void process(PacketWrapper packetWrapper) {
                         //TODO 链接
-                        packetModelListViewModel.add(new PacketModel(String.valueOf(packetNumber),
+                        threadOwnerModel.add(new PacketModel(String.valueOf(packetID),
                                 ((Date)packetWrapper.getObject(PacketWrapper.TIME)).toString(),
                                 packetWrapper.getPcapPacket(),null));
-                        packetNumber++;
-                        if (packetNumber%100==0&&packetNumber!=0)
-                            ObserverCenter.notifyLogging("has capture : " + packetNumber);
+                        packetID++;
+                        if (packetID%100==0&&packetID!=0)
+                            ObserverCenter.notifyLogging(interfaceName + "has capture : " + packetID);
+
+                        //PacketCaptureServiceProxy.getPacketSender(nameList.get(1)).sendDatas(packetWrapper.getPcapPacket());
                     }
                 });
             }else{
@@ -193,7 +201,8 @@ public class HomeController extends AbstractController<HomeRepository> {
                 }
             }
         });
-        //停止线程
+
+        //停止接口线程服务
         home_btn_stop_thread.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -203,8 +212,18 @@ public class HomeController extends AbstractController<HomeRepository> {
                 home_btn_start_capturing.setText("START");
             }
         });
-
-        //图像
+        //初始化choice box
+        home_choice_box_receive_interface.setItems(nameList);
+        //设置第一个接口为默认接口
+        home_choice_box_receive_interface.setValue(nameList.get(0));
+        //切换表格数据源
+        home_choice_box_receive_interface.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                home_table_packet.setItems(demo.common.Common.getTableDataByInterfaceName(observable.getValue()).getPacketModelObservableList());
+            }
+        });
+        //图像显示sysInfo
         home_img_notification.setOnMouseMoved(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -356,11 +375,10 @@ public class HomeController extends AbstractController<HomeRepository> {
                 return param.getValue().packetInfoProperty();
             }
         });
-        packetModelListViewModel = new ListViewModel<>(500);
-        //设置tableView和数据之间的绑定
-        dummyData = FXCollections.observableList(packetModelListViewModel.getList());
-        home_table_packet.setEditable(true);
-        home_table_packet.setItems(dummyData);
+
+        //默认选择第一个接口关联到table，和choice box的一致
+        home_table_packet.setItems(demo.common.Common.getTableDataByInterfaceName(nameList.get(0)).getPacketModelObservableList());
+
 //        dummyData.add(new PacketModel("0","2","3","4","info1"));
 //        dummyData.add(new PacketModel("1","2","3","4",null));
 //        dummyData.add(new PacketModel("2","2","3","4",null));
@@ -409,5 +427,9 @@ public class HomeController extends AbstractController<HomeRepository> {
 
     private void startCapture(String interfaceName){
         PacketCaptureServiceProxy.startCapturingPacket(interfaceName);
+    }
+
+    private void bindDataForInterface(String interfaceName){
+
     }
 }

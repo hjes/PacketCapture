@@ -63,9 +63,9 @@ import java.util.concurrent.LinkedBlockingQueue;
     @Override
     public void process(PacketWrapper packetWrapper) {
         if (!hasStarted) {
-            ObserverCenter.notifyLogging("服务未开始，正在开始服务...");
+            ObserverCenter.notifyLogging(deviceName + "服务未开始，正在开始服务...");
             startService();
-            ObserverCenter.notifyLogging("服务开启成功");
+            ObserverCenter.notifyLogging(deviceName + "服务开启成功");
             hasStarted = true;
         }
         addPacket(packetWrapper.getPcapPacket());

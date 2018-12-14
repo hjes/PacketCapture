@@ -8,6 +8,9 @@ import filter.MultiPacketFilter;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.packet.PcapPacket;
 import org.jnetpcap.packet.PcapPacketHandler;
+import org.jnetpcap.protocol.network.Ip4;
+import org.jnetpcap.protocol.tcpip.Http;
+import org.jnetpcap.protocol.tcpip.Tcp;
 import packet.processor.PacketProcessor;
 
 public class PacketHandler<T> implements PcapPacketHandler<T> {
@@ -121,7 +124,12 @@ public class PacketHandler<T> implements PcapPacketHandler<T> {
                 if (multiPacketFilter.packetFilter(packet))
                     processorAndObserveThread.process(new PacketWrapper(packet));
             } else {//不设置过滤器
-                processorAndObserveThread.process(new PacketWrapper(packet));
+//                System.out.println(interfaceName +"----- capture!!");
+                Tcp tcp = new Tcp();
+                if (packet.hasHeader(tcp)) {
+                    processorAndObserveThread.process(new PacketWrapper(packet));
+                    System.out.println(interfaceName + "has TCP : " + packet.getTotalSize() + " -- " + tcp.destination());
+                }
             }
 
         /*

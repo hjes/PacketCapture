@@ -1,6 +1,13 @@
 package demo.common;
 
+import demo.model.ListViewModel;
+import demo.model.PacketModel;
 import demo.model.SysInfoBean;
+import demo.model.TableDataBindBean;
+import demo.util.PrintUtils;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import org.jnetpcap.packet.PcapPacket;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
@@ -11,6 +18,8 @@ public class Common {
     public static final String LOGGING = "logging";
     //接口转发细节
     public static HashMap<String, Set<String>>  receiverHashMap;
+    //接口抓取的数据
+    public static HashMap<String, TableDataBindBean> interfaceNameToTableDataMap = new HashMap<>(5);
 
     //获取当前程序的占用信息
     public static SysInfoBean getSysInfo(){
@@ -50,5 +59,34 @@ public class Common {
 
     public static void addReceiver(String sender,List<String> list){
         receiverHashMap.get(sender).addAll(list);
+    }
+
+    /**
+     *
+     * @param interfaceName
+     * @param listViewModel
+     * @return
+     */
+    public static TableDataBindBean addInterfaceTableDataMapping(String interfaceName,ListViewModel<PacketModel> listViewModel){
+        TableDataBindBean tableDataBindBean = null;
+        ObservableList<PacketModel> packetModelObservableList = FXCollections.observableList(listViewModel.getList());
+        tableDataBindBean = new TableDataBindBean(listViewModel,packetModelObservableList);
+        interfaceNameToTableDataMap.put(interfaceName,tableDataBindBean);
+        return tableDataBindBean;
+    }
+
+    /**
+     *
+     * @param interfaceName
+     * @return
+     */
+    public static TableDataBindBean getTableDataByInterfaceName(String interfaceName){
+        TableDataBindBean tableDataBindBean = null;
+        if (interfaceNameToTableDataMap.get(interfaceName)==null){
+            tableDataBindBean = addInterfaceTableDataMapping(interfaceName,new ListViewModel<PacketModel>(500));
+        }else{
+            tableDataBindBean = interfaceNameToTableDataMap.get(interfaceName);
+        }
+        return tableDataBindBean;
     }
 }

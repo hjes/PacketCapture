@@ -38,8 +38,8 @@ public class WinSender implements PacketProcessor {
         //Transfer data to destination
         JBuffer jBuffer = new JBuffer(packetWrapper.getPcapPacket().getTotalSize());
         packetWrapper.getPcapPacket().transferTo(jBuffer);
+
 //        packet.transferStateAndDataTo(bytes);
-        System.out.println("send to " + deviceName + " " + packetWrapper.getPcapPacket().getCaptureHeader().caplen() + "bytes -- len : " + packetWrapper.getPcapPacket().getPacketWirelen());
         if (pcap.sendPacket(jBuffer) != Pcap.OK) {
             //send error
             System.err.println(pcap.getErr());

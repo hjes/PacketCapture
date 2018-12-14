@@ -130,8 +130,12 @@ public class PacketCaptureServiceProxy{
         }
     }
     public static void addProcessor(String interfaceName, PacketProcessor packetProcessor){
-        if (packetCaptureThreadHashMap.get(interfaceName)==null)
+        if (packetCaptureThreadHashMap.get(interfaceName)==null) {
+            System.out.println("can not add process to " + interfaceName + ", check your interface name and" +
+                    "make sure that you have created the RIGHT process THREAD");
             return;
+        }
         packetCaptureThreadHashMap.get(interfaceName).addProcessor(packetProcessor);
+        System.out.println("add process to " + interfaceName);
     }
 }

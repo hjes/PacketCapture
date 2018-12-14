@@ -15,7 +15,11 @@
                 <ListView fx:id="send_dialog_sender"/>
                 <VBox spacing="10" alignment="BOTTOM_RIGHT">
                     <ListView fx:id="sender_dialog_receiver" HBox.hgrow="ALWAYS"/>
-                    <Button fx:id="sender_dialog_btn_add_receiver" text="+" alignment="CENTER"/>
+                    <HBox VBox.vgrow="ALWAYS" alignment="BOTTOM_RIGHT" spacing="20">
+                        <Button fx:id="sender_dialog_btn_add_receiver" text="+" alignment="CENTER"/>
+                        <Button fx:id="sender_dialog_btn_del_receiver" text="-" alignment="CENTER"/>
+                        <Button fx:id="send_packet" text="SEND" alignment="CENTER"/>
+                    </HBox>
                 </VBox>
             </HBox>
         </StackPane>
