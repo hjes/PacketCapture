@@ -26,11 +26,6 @@ public class PacketModel extends RecursiveTreeObject<PacketModel> {
         this.packetProtocol = new SimpleStringProperty(packetProtocol);
         this.packetTime = new SimpleStringProperty(packetTime);
         this.packetInfo = new SimpleStringProperty(packetInfo);
-        Tcp tcp = new Tcp();
-        if (pcapPacket!=null)
-            if (pcapPacket.hasHeader(tcp)) {
-                this.packetInfo.setValue(String.valueOf(tcp.destination()));
-            }
     }
     public StringProperty idProperty() {
         return id;
