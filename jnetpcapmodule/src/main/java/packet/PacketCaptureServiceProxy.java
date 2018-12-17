@@ -22,6 +22,7 @@ public class PacketCaptureServiceProxy{
     private static List<String> interfaceName;
     private static List<String> interfaceDetails;
     private static HashMap<String,PacketCaptureThread> packetCaptureThreadHashMap = new HashMap<>(5);
+    private static HashMap<String,Pcap> pcapHashMap = new HashMap<>(5);
 
     /**
      * @param interfaceName 接口名
@@ -110,7 +111,9 @@ public class PacketCaptureServiceProxy{
         switch (state){
             case CaptureThreadState.PAUSE:packetCaptureThread.pause();break;
             case CaptureThreadState.CONSUME:packetCaptureThread.consume();break;
-            case CaptureThreadState.QUIT:packetCaptureThread.stopService();break;
+            case CaptureThreadState.QUIT:packetCaptureThread.stopService();
+                packetCaptureThreadHashMap.remove(interfaceName);
+            break;
             default:System.err.println("state : " + state + " not define");
         }
     }
@@ -129,6 +132,7 @@ public class PacketCaptureServiceProxy{
             packetCaptureThreadHashMap.get(interfaceName).addFilterIntoInterface(string);
         }
     }
+
     public static void addProcessor(String interfaceName, PacketProcessor packetProcessor){
         if (packetCaptureThreadHashMap.get(interfaceName)==null) {
             System.out.println("can not add process to " + interfaceName + ", check your interface name and" +
@@ -137,5 +141,27 @@ public class PacketCaptureServiceProxy{
         }
         packetCaptureThreadHashMap.get(interfaceName).addProcessor(packetProcessor);
         System.out.println("add process to " + interfaceName);
+    }
+
+    public static Pcap getPcapByInterfaceName(String interfaceName){
+        Pcap pcap = null;
+        if (pcapHashMap.get(interfaceName)==null){
+            // 截取长度不超过数据报max65535
+            int snaplen = 64 * 1024; // Capture all packets, no trucation 截断
+            // 混杂模式
+            int flags = Pcap.MODE_PROMISCUOUS; // capture all packets
+            int timeout = 10 * 1000; // 10 seconds in millis
+            StringBuilder errbuf = new StringBuilder();
+            pcap = Pcap.openLive(interfaceName, snaplen, flags, timeout, errbuf);
+            if (pcap == null) {
+                System.err.printf("Error while opening device for capture: "
+                        + errbuf.toString());
+               throw new NullPointerException("pcap is null");
+            }
+            pcapHashMap.put(interfaceName,pcap);
+            return pcap;
+        }else {
+            return pcapHashMap.get(interfaceName);
+        }
     }
 }

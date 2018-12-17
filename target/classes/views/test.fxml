@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="1000.0">
+    <VBox spacing="10">
+        <TextArea fx:id="test_textarea" prefWidth="1000">
+
+        </TextArea>
+
+        <HBox alignment="CENTER_RIGHT">
+            <TextArea fx:id="test_input" prefHeight="50"/>
+            <Button fx:id="test_send" text="send message" prefHeight="50"/>
+        </HBox>
+    </VBox>
+
+</StackPane>

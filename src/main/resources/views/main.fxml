@@ -22,6 +22,11 @@
               <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
             </accelerator>
           </MenuItem>
+          <MenuItem fx:id="test" mnemonicParsing="false" text="测试">
+            <accelerator>
+              <KeyCodeCombination alt="UP" code="R" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+            </accelerator>
+          </MenuItem>
         </Menu>
         <Menu mnemonicParsing="false" text="编辑">
           <MenuItem fx:id="save" mnemonicParsing="false" text="保存">

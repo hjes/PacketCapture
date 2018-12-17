@@ -2,6 +2,7 @@ package packet;
 
 import common.ObserverCenter;
 import data.PacketWrapper;
+import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
 import packet.processor.PacketProcessor;
 
@@ -20,13 +21,10 @@ public class ProcessorThread extends Thread implements PacketProcessor {
     private double currentSize;
     private double lossSize;
     private int totalSize = 1500;
-    private LinkedBlockingQueue<PcapPacket> pcapPacketConcurrentLinkedQueue = new LinkedBlockingQueue<>(totalSize);
-    private boolean stopService = false;
+    private LinkedBlockingQueue<JPacket> pcapPacketConcurrentLinkedQueue = new LinkedBlockingQueue<>(totalSize);
+    private volatile boolean stopService = false;
     private boolean isStopService = false;
 
-    public void pauseTheThread(){
-
-    }
     /**
      * 初始化时添加
      * @param packetProcessors
@@ -69,7 +67,7 @@ public class ProcessorThread extends Thread implements PacketProcessor {
                     ObserverCenter.notifyLogging("break in process thread");
                     break;
                 }
-                PcapPacket tempPcapPacket = null;
+                JPacket tempPcapPacket = null;
                 try {
                     tempPcapPacket = pcapPacketConcurrentLinkedQueue.take();
                 } catch (InterruptedException e) {

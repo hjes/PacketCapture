@@ -4,6 +4,7 @@ import common.Common;
 import common.Observer;
 import common.ObserverCenter;
 import data.PacketWrapper;
+import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
 
 import java.util.LinkedList;
@@ -13,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
  public class PackageSender extends Thread implements PacketProcessor {
 
-    private LinkedBlockingQueue<PcapPacket> packetQueue;
+    private LinkedBlockingQueue<JPacket> packetQueue;
     private List<Observer<String>> observerList;
     private String deviceName;
     private PacketProcessor packetProcessor;
@@ -35,7 +36,7 @@ import java.util.concurrent.LinkedBlockingQueue;
      * @param packet 接收到的数据包
      * @return
      */
-    private boolean addPacket(PcapPacket packet){
+    private boolean addPacket(JPacket packet){
         return packetQueue.offer(packet);
     }
 
@@ -44,7 +45,7 @@ import java.util.concurrent.LinkedBlockingQueue;
         //不断从ArrayQueue中取出数据包处理
         for(;;){
             try {
-                PcapPacket packet = packetQueue.take();
+                JPacket packet = packetQueue.take();
                 packetProcessor.process(new PacketWrapper(packet));
             } catch (InterruptedException e) {
 //                e.printStackTrace();
@@ -71,7 +72,7 @@ import java.util.concurrent.LinkedBlockingQueue;
         addPacket(packetWrapper.getPcapPacket());
     }
 
-    public PackageSender sendDatas(PcapPacket pcapPacket){
+    public PackageSender sendDatas(JPacket pcapPacket){
         process(new PacketWrapper(pcapPacket));
         return this;
     }
