@@ -30,7 +30,7 @@
         </VBox>
     </left>
     <right>
-        <VBox spacing="10" prefWidth="200">
+        <VBox spacing="10" prefWidth="400" style="-fx-padding: 5 5 5 5">
 
         </VBox>
     </right>

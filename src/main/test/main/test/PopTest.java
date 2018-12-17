@@ -87,10 +87,15 @@ public class PopTest extends Application {
     @Test
     public void sendTest(){
         List<String> nameList = PacketCaptureServiceProxy.getAllInterfacesName();
-        for (String s:nameList)
+        List<String> detailList = PacketCaptureServiceProxy.getAllInterfaceDetails();
+        int i = 0;
+        for (String s:detailList) {
             System.out.println(s);
-        String choosenName = nameList.get(nameList.size()-1);
-        String receiverName = nameList.get(nameList.size()-3);
+            System.out.println("mac address : " + PacketUtils.getMacAddress(nameList.get(i)));
+            i++;
+        }
+        String choosenName = nameList.get(0);
+        String receiverName = nameList.get(nameList.size()-2);
         JPacketHandler<String> packetHandler = new JPacketHandler<>();
         JPacketHandler<String> packetHandler2 = new JPacketHandler<>();
         packetHandler.addProcessor(new PacketProcessor() {
@@ -98,7 +103,6 @@ public class PopTest extends Application {
             public void process(PacketWrapper packetWrapper) {
                 System.out.println(packetWrapper.getPcapPacket().toString());
                 PacketCaptureServiceProxy.getPacketSender(receiverName).sendDatas(packetWrapper.getPcapPacket());
-
             }
         });
         packetHandler2.addProcessor(new PacketProcessor() {
@@ -106,7 +110,7 @@ public class PopTest extends Application {
             public void process(PacketWrapper packetWrapper) {
                 System.out.println("receive");
                 PcapPacket jPacket = (PcapPacket) packetWrapper.getPcapPacket();
-
+                System.out.println(jPacket.toString());
             }
         });
         PacketCapture.mainJCapture(choosenName,packetHandler,1);

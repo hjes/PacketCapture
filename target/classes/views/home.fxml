@@ -68,10 +68,10 @@
           </HBox>
         </VBox>
       </StackPane>
-      <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS">
+      <VBox alignment="TOP_CENTER" style="-fx-border-color: BLACK rgba(0,0,0,0) BLACK BLACK" HBox.hgrow="ALWAYS" prefWidth="600">
         <Text style="-fx-text-fill: BLACK;-fx-font-size: 15" text="数据包">
         </Text>
-        <VBox spacing="5" alignment="BOTTOM_RIGHT">
+        <VBox spacing="5" VBox.vgrow="ALWAYS">
         <TableView fx:id="home_table_packet" style="-fx-border-color: BLACK rgba(0,0,0,0) rgba(0,0,0,0) rgba(0,0,0,0);-fx-text-alignment: CENTER"
                           VBox.vgrow="ALWAYS">
           <VBox.margin><Insets bottom="2" /></VBox.margin>
@@ -79,13 +79,13 @@
             <TableColumn fx:id="packetIDColumn" style="-fx-alignment: CENTER"
                                 text="id"  prefWidth="50"/>
             <TableColumn fx:id="packetTimeColumn" style="-fx-alignment: CENTER"
-                                text="time" prefWidth="150"/>
+                                text="time" prefWidth="200"/>
             <TableColumn fx:id="packetLengthColumn" style="-fx-alignment: CENTER"
-                                text="length" prefWidth="50" />
+                                text="length" prefWidth="100" />
             <TableColumn fx:id="packetProtocolColumn" style="-fx-alignment: CENTER"
-                                text="protocol" prefWidth="150"/>
+                                text="protocol" prefWidth="100"/>
             <TableColumn fx:id="packetInfoColumn" style="-fx-alignment: CENTER"
-                         text="info" prefWidth="200" />
+                         text="info" prefWidth="250" />
           </columns>
         </TableView>
           <HBox spacing="10" alignment="CENTER_RIGHT" style="-fx-padding: 5 5 5 0 ">
@@ -103,11 +103,11 @@
           promptText="logging"/>
     </ScrollPane>
       <HBox>
-        <VBox style="-fx-padding: 5;-fx-border-color: BLACK" spacing="5" prefWidth="100">
+        <VBox style="-fx-padding: 5;-fx-border-color: BLACK" spacing="5" alignment="CENTER" prefWidth="100">
           <HBox.margin><Insets left="5" top="5" bottom="5"/></HBox.margin>
           <Button fx:id="home_btn_clear_textarea" text="clear"/>
         </VBox>
-        <TextArea fx:id="home_textarea_packet_overview"/>
+        <TextArea fx:id="home_textarea_packet_overview" HBox.hgrow="ALWAYS"/>
       </HBox>
     </HBox>
   </bottom>
