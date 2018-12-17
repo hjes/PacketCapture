@@ -98,15 +98,16 @@
   </center>
   <bottom>
     <HBox alignment="CENTER_LEFT">
-    <ScrollPane prefWidth="600">
+    <ScrollPane>
           <TextArea fx:id="home_textarea_logging" VBox.vgrow="ALWAYS" HBox.hgrow="ALWAYS" prefWidth="850"
           promptText="logging"/>
     </ScrollPane>
       <HBox>
-        <VBox style="-fx-padding: 5;-fx-border-color: BLACK" spacing="5">
+        <VBox style="-fx-padding: 5;-fx-border-color: BLACK" spacing="5" prefWidth="100">
           <HBox.margin><Insets left="5" top="5" bottom="5"/></HBox.margin>
           <Button fx:id="home_btn_clear_textarea" text="clear"/>
         </VBox>
+        <TextArea fx:id="home_textarea_packet_overview"/>
       </HBox>
     </HBox>
   </bottom>

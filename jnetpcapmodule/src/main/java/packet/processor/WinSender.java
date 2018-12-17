@@ -4,13 +4,10 @@ import data.PacketWrapper;
 import org.jnetpcap.Pcap;
 import org.jnetpcap.nio.JBuffer;
 import org.jnetpcap.winpcap.WinPcap;
+import packet.PacketCaptureServiceProxy;
 import packet.processor.PacketProcessor;
 
 public class WinSender implements PacketProcessor {
-    private int snaplen; // Capture all packets, no trucation
-    private int flags; // capture all packets
-    private int timeout; // 10 seconds in millis
-    private StringBuilder errbuf; // For any error msgs
     private String deviceName;
     private Pcap pcap;
 
@@ -20,27 +17,20 @@ public class WinSender implements PacketProcessor {
      */
     public WinSender(String deviceName){
         this.deviceName = deviceName;
-        snaplen = 64 * 1024;
-        flags = Pcap.MODE_PROMISCUOUS;
-        timeout = 10 * 1000;
-        errbuf = new StringBuilder();
-        pcap = WinPcap.openLive(deviceName, snaplen, flags, timeout, errbuf);
+        pcap = PacketCaptureServiceProxy.getPcapByInterfaceName(deviceName);
     }
 
     @Override
     public void process(PacketWrapper packetWrapper) {
-//        if (bytes==null||byteLength<packet.getCaptureHeader().caplen()){
-//            if(bytes!=null)
-//                byteLength = packet.getCaptureHeader().caplen();
-//            bytes = new byte[byteLength];
-//            System.out.println("init byte 1024");
+        //TODO gai hiu lai
+//        JBuffer jBuffer = new JBuffer(packetWrapper.getPcapPacket().getTotalSize());
+//        packetWrapper.getPcapPacket().transferTo(jBuffer);
+//        if (pcap.sendPacket(jBuffer) != Pcap.OK) {
+//            //send error
+//            System.err.println(pcap.getErr());
 //        }
-        //Transfer data to destination
-        JBuffer jBuffer = new JBuffer(packetWrapper.getPcapPacket().getTotalSize());
-        packetWrapper.getPcapPacket().transferTo(jBuffer);
-
-//        packet.transferStateAndDataTo(bytes);
-        if (pcap.sendPacket(jBuffer) != Pcap.OK) {
+        //test
+        if (pcap.sendPacket(packetWrapper.getPcapPacket()) != Pcap.OK) {
             //send error
             System.err.println(pcap.getErr());
         }

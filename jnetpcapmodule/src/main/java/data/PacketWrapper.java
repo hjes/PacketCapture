@@ -1,14 +1,15 @@
 package data;
 
+import org.jnetpcap.packet.JPacket;
 import org.jnetpcap.packet.PcapPacket;
 
 import java.util.HashMap;
 
 public class PacketWrapper {
     public static final String TIME = "packet_time";
-    private PcapPacket pcapPacket;
+    private JPacket pcapPacket;
     private HashMap<Object,Object> messageMap;
-    public PacketWrapper(PcapPacket pcapPacket){
+    public PacketWrapper(JPacket pcapPacket){
         this.pcapPacket = pcapPacket;
     }
 
@@ -23,7 +24,7 @@ public class PacketWrapper {
         return messageMap.get(key);
     }
 
-    public PcapPacket getPcapPacket(){
+    public JPacket getPcapPacket(){
         return pcapPacket;
     }
 

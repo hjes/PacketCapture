@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import packet.util.graph.AreaChartPane?>
+<?import packet.util.graph.BarChartPane?>
+<?import packet.util.graph.LineChartPane?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="1000" prefWidth="850.0"
+            style="-fx-background-color: rgb(8,10,47)">
+    <center>
+
+    </center>
+    <left>
+        <VBox spacing="10" prefWidth="400" style="-fx-padding: 5 5 5 5">
+            <LineChartPane fx:id="graph_stage_line_chart" style="-fx-background-color: TRANSPARENT;-fx-border-color: WHITE"/>
+            <BarChartPane fx:id="graph_stage_bar_chart" style="-fx-background-color: TRANSPARENT;-fx-border-color: WHITE"/>
+            <TableView fx:id="graph_stage_table_view" style="-fx-background-color: TRANSPARENT;-fx-border-color: WHITE" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="NAME" style="-fx-text-fill: BLACK" text="NAME" prefWidth="200"/>
+                    <TableColumn fx:id="ATTACK" style="-fx-text-fill: BALCK" text="ATTACK" prefWidth="100"/>
+                    <TableColumn fx:id="AFFAIR" style="-fx-text-fill: BLACK" text="AFFAIR" prefWidth="100"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </left>
+    <right>
+        <VBox spacing="10" prefWidth="400" style="-fx-padding: 5 5 5 5">
+
+        </VBox>
+    </right>
+</BorderPane>

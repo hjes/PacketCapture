@@ -1,7 +1,7 @@
 package main.test;
 
 import common.ThreadObserver;
-import demo.model.ListViewModel;
+import packet.model.ListViewModel;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.junit.Test;

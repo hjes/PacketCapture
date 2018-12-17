@@ -2,6 +2,7 @@ package packet;
 
 import common.Common;
 import common.ObserverCenter;
+import packet.handler.PacketHandler;
 import packet.processor.PacketProcessor;
 
 /**
@@ -12,7 +13,7 @@ public class PacketCaptureThread extends Thread{
     private String interfaceName;
     //Handler
     private PacketHandler<String> packetHandler;
-    private boolean hasPause = false;
+    private volatile boolean hasPause = false;
 
     public int currentState = Common.CaptureThreadState.WAITING;
 

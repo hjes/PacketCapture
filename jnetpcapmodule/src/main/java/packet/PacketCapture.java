@@ -1,16 +1,17 @@
 package packet;
 
 import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapBpfProgram;
 import org.jnetpcap.PcapDumper;
 import org.jnetpcap.PcapIf;
+import packet.handler.JPacketHandler;
+import packet.handler.PacketHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class PacketCapture {
     public static final List<String> capturingInterfaces = new ArrayList<>(5);
+
 
     /**
      * 根据接口index获取设备
@@ -32,27 +33,63 @@ public class PacketCapture {
      * 根据接口名字运行设备
      * @param interfaceName
      */
-    public static void mainCapture(String interfaceName,PacketHandler<String> packetHandler) {
+    public static void mainCapture(String interfaceName, PacketHandler<String> packetHandler) {
         //if has started capturing this interface , return
         if (capturingInterfaces.contains(interfaceName)){
             System.out.println("has started this interface");
             return;
         }
-        List<PcapIf> alldevs = new ArrayList<>(); // Will be filled with
-        // NICs
-        StringBuilder errbuf = new StringBuilder(); // For any error msgs
 
         /*
          ***************************************************************************
          * First get a list of devices on this system
          *************************************************************************
-         */
         int r = Pcap.findAllDevs(alldevs, errbuf);
         if (r == Pcap.NOT_OK || alldevs.isEmpty()) {
             System.err.printf("Can't read list of devices, error is %s",
                     errbuf.toString());
             return;
         }
+        */
+
+
+        /***************************************************************************
+         * Second we open up the selected device
+         **************************************************************************/
+        Pcap pcap = PacketCaptureServiceProxy.getPcapByInterfaceName(interfaceName);
+
+        synchronized (capturingInterfaces) {
+            capturingInterfaces.add(interfaceName);
+        }
+
+        //PacketHandler处理
+        /***************************************************************************
+         * Fourth we enter the loop and tell it to capture 10 packets. The loop
+         * method does a mapping of pcap.datalink() DLT value to JProtocol ID,
+         * which is needed by JScanner. The scanner scans the packet buffer and
+         * decodes the headers. The mapping is done automatically, although a
+         * variation on the loop method exists that allows the programmer to
+         * sepecify exactly which protocol ID to use as the data link type for
+         * this pcap interface.
+         **************************************************************************/
+        //String ofile = "tmp-capture-file.cap";
+        //PcapDumper dumper = pcap.dumpOpen(ofile); // output file
+        packetHandler.setPcap(pcap);
+        packetHandler.start();
+        pcap.loop(-1, packetHandler, "jNetP_cap rocks!");
+
+        /***************************************************************************
+         * Last thing to do is close the pcap handle
+         **************************************************************************/
+        //dumper.close(); //dumper 和 pcap都要关闭
+        pcap.close();
+        System.out.println(String.format("has close %s",interfaceName));
+    }
+
+
+    public static void mainJCapture(String interfaceName, JPacketHandler<String> jPacketHandler,int captureNum) {
+        //if has started capturing this interface , return
+        // NICs
         /*
         System.out.println("Network devices found:");
 
@@ -86,17 +123,7 @@ public class PacketCapture {
                 errbuf);
         System.out.println(String.format("has open %s",device.getName()));
         */
-        Pcap pcap = Pcap.openLive(interfaceName, snaplen, flags, timeout,
-                errbuf);
-        if (pcap == null) {
-            System.err.printf("Error while opening device for capture: "
-                    + errbuf.toString());
-            return;
-        }
-
-        synchronized (capturingInterfaces) {
-            capturingInterfaces.add(interfaceName);
-        }
+        Pcap pcap = PacketCaptureServiceProxy.getPcapByInterfaceName(interfaceName);
 
         //PacketHandler处理
         /***************************************************************************
@@ -108,19 +135,15 @@ public class PacketCapture {
          * sepecify exactly which protocol ID to use as the data link type for
          * this pcap interface.
          **************************************************************************/
-        String ofile = "tmp-capture-file.cap";
-        PcapDumper dumper = pcap.dumpOpen(ofile); // output file
-        packetHandler.setPcap(pcap);
-        packetHandler.start();
-        pcap.loop(-1, packetHandler, "jNetP_cap rocks!");
+        pcap.loop(captureNum, jPacketHandler, "jNetP_cap rocks!");
 
         /***************************************************************************
          * Last thing to do is close the pcap handle
          **************************************************************************/
-        dumper.close(); //dumper 和 pcap都要关闭
         pcap.close();
         System.out.println(String.format("has close %s",interfaceName));
     }
+
 
     /**
      * 可以独立运行的程序，用于测试
